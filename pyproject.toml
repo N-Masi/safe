@@ -1,0 +1,26 @@
+[project]
+name = "sfear"
+version = "0.0.1"
+dependencies = [
+  'numpy',
+  'pandas',
+  'geopandas',
+  'xarray',
+  'zarr',
+  'plotly',
+  'shapely',
+  'gcsfs',
+  'fsspec',
+  'cfsgrib',
+  'pickle',
+  'pytest',
+  'requests_cache',
+  'pygeoboundaries_geolab @ git+https://github.com/N-Masi/pygeoboundaries.git'
+]
+authors = [
+  {name = "Nick Masi", email = "nicholas_masi@brown.edu"},
+  {name = "Randall Balestriero", email = "randall_balestriero@brown.edu"}
+]
+description = "Stratified Fairness over Earth"
+readme = "README.md"
+keywords = ["fairness", "machine learning", "climate", "weather", "earth", "stratification"]
