@@ -93,7 +93,6 @@ def climate_weighted_l2(
             gt = gt.transpose(lon_dim, lat_dim, *reduction_dims, *preserved_dims)
             
             # TODO: pass preds and values to different (even more) subfunctions, one for each loss function
-            pdb.set_trace()
             diffs = preds.values - gt.values
             lat_weights = lat_weights.reshape(lat_weights.shape + (1,)*(diffs.ndim-lat_weights.ndim))
             weighted_l2 = lat_weights*(diffs**2)
@@ -104,7 +103,7 @@ def climate_weighted_l2(
                 *weighted_l2.shape[2+len(reduction_dims):]
             )
             
-            mesh_lon, mesh_lat = np.meshgrid(data[lon_dim].values, data[lat_dim].values)
+            mesh_lon, mesh_lat = np.meshgrid(data[lon_dim].values, data[lat_dim].values, indexing='ij')
             flat_lons = mesh_lon.flatten()
             flat_lats = mesh_lat.flatten()
             geometry = [shapely.Point(xy) for xy in zip(flat_lons, flat_lats)]
