@@ -1,19 +1,52 @@
-import sfear
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+import safe.data.climate.era5
+import safe.data.climate.wb2
+import safe.metrics.losses
+import safe.metrics.errors
 import pandas as pd
 import numpy as np
+import pickle
+import time
+import pdb
 
-models = ['graphcast'] #['pangu', 'graphcast', 'fuxi']
+start = time.time()
+
+models = ['graphcast'] #['keisler', 'pangu', 'graphcast', 'sphericalcnn', 'fuxi', 'neuralgcm'cc]
 resolution = '240x121' #'1440x721' TODO: implement 1440x721
-lead_times = [np.timedelta64(x, 'h') for x in range(12, 241, 12)]
-variables = ['T850', 'Z500']
-era5 = sfear.data.era5.get_era5(res)
-data = pd.DataFrame()
-for model in models:
-    preds = sfear.data.wb2.get_wb2_preds(model, resolution, lead_times)
-    preds_gdf = sfear.metadata.collect_metadata(preds, lon_dim='longitude', lat_dim='latitude')
-    metrics = sfear.metadata.metacategory_climate_metrics(preds_gdf, era5, variables=variables, categories='all')
-    # TODO: append model_name to metrics as a new column
-    # TODO: append metrics to data
-with open('outputs/wb2_1440x721.pkl', 'wb') as f:
-    pickle.dump(data, f)
-# TODO: call sfear.viz (put this in one of the loops)
+lead_times = [np.timedelta64(12, 'h')]#[np.timedelta64(x, 'h') for x in range(12, 241, 12)]
+variables = ['T850', 'Z500'] # TODO: pass these to get_era5 and get_wb2_preds to have user-defined variables
+era5 = safe.data.climate.era5.get_era5(resolution)
+for model_name in models:
+    model_start = time.time()
+    preds = safe.data.climate.wb2.get_wb2_preds(model_name, resolution, lead_times)
+    loss_gdf = safe.metrics.losses.climate_weighted_l2(
+        data=preds, 
+        ground_truth=era5, 
+        lon_dim='longitude', 
+        lat_dim='latitude',
+        lead_time_dim='prediction_timedelta',
+        reduction_dims=['time'],
+        use_polygons=True,
+        polygon_edge_in_degrees=1.5,
+    )
+    loss_gdf.to_csv(f'outputs/weighted_l2_{model_name}_{resolution}.csv', index=False)
+    print(f'Execution tmie to get weighted l2: {time.time() - model_start}')
+    metrics = safe.metrics.errors.stratified_rmse(
+        loss_gdf,
+        loss_metrics=['weighted_l2'],
+        strata_groups='all',
+        added_cols={'model': model_name}
+    )
+    print(f'Execution time to get RMSEs: {time.time() - model_start}')
+    with open(f'outputs/metrics_{model_name}_{resolution}.pkl', 'wb') as f:
+        pickle.dump(metrics, f)
+
+# TODO: call safe.viz (put this in one of the loops)
+
+print(f'Time to complete script: {time.time() - start}')
+print(f'Models: {models}')
+print(f'Resolution: {resolution}')
+print(f'Lead times: {lead_times}')

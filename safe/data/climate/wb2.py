@@ -5,7 +5,7 @@ import zarr
 import cfgrib
 import gcsfs
 import fsspec
-from sfear.data import wb2_stores
+from safe.data.climate import wb2_stores
 
 # TODO: support user-defined variable selection
 def get_wb2_preds(

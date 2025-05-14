@@ -1,5 +1,5 @@
 [project]
-name = "sfear"
+name = "safe"
 version = "0.0.1"
 dependencies = [
   'numpy',
@@ -15,12 +15,14 @@ dependencies = [
   'pickle',
   'pytest',
   'requests_cache',
-  'pygeoboundaries_geolab @ git+https://github.com/N-Masi/pygeoboundaries.git'
+  'pygeoboundaries_geolab @ git+https://github.com/N-Masi/pygeoboundaries.git',
+  'kaleido'
 ]
 authors = [
   {name = "Nick Masi", email = "nicholas_masi@brown.edu"},
+  {name = "Daniel Cai", email = "daniel_cai@brown.edu"},
   {name = "Randall Balestriero", email = "randall_balestriero@brown.edu"}
 ]
-description = "Stratified Fairness over Earth"
+description = "Stratified Assessments of Forecasts over Earth"
 readme = "README.md"
 keywords = ["fairness", "machine learning", "climate", "weather", "earth", "stratification"]
