@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 from typing import List
 
-def rmse_calculator(
+def rmse_wrapper(
         gdf: gpd.GeoDataFrame,
         variables: list, 
         lead_times: list, 
@@ -17,12 +17,12 @@ def rmse_calculator(
             data = {'variable': variable, 'lead_time': lead_time}
             data.update(added_cols)
             for metric in loss_metrics:
-                rmse = rmse(gdf[gdf.variable==variable][gdf.lead_time==lead_time], metric)
+                rmse = rmse_calculator(gdf[gdf.variable==variable][gdf.lead_time==lead_time], metric)
                 data.update({f'rmse_{metric}': rmse})
             output.append(data)
     return pd.DataFrame(output)
 
-def rmse(
+def rmse_calculator(
         gdf: gpd.GeoDataFrame,
         metric: str,
     ) -> np.float64:

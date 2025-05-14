@@ -5,6 +5,7 @@ import shapely
 from safe.utils.surface_area import *
 from safe.utils.geometry_funcs import *
 from typing import List
+import pdb
 
 def climate_weighted_l2(
         data: xr.Dataset, 
@@ -92,6 +93,7 @@ def climate_weighted_l2(
             gt = gt.transpose(lon_dim, lat_dim, *reduction_dims, *preserved_dims)
             
             # TODO: pass preds and values to different (even more) subfunctions, one for each loss function
+            pdb.set_trace()
             diffs = preds.values - gt.values
             lat_weights = lat_weights.reshape(lat_weights.shape + (1,)*(diffs.ndim-lat_weights.ndim))
             weighted_l2 = lat_weights*(diffs**2)
@@ -110,7 +112,9 @@ def climate_weighted_l2(
                 geometry = square_polygons_from_points(geometry, polygon_edge_in_degrees)
 
             df = pd.DataFrame({
-                "weighted_l2": [row.tolist() for row in weighted_l2]
+                lon_dim: flat_lons,
+                lat_dim: flat_lats,
+                "weighted_l2": [row[~np.isnan(row)].tolist() for row in weighted_l2]
             })
             gdf = gpd.GeoDataFrame(df, geometry=geometry, crs=4326)
             gdf['variable'] = variable

@@ -5,3 +5,4 @@ outputs/*
 *.sqlite
 sandbox
 sandbox/*
+*.out

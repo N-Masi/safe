@@ -14,9 +14,9 @@ import pdb
 
 start = time.time()
 
-models = ['graphcast'] #['keisler', 'pangu', 'graphcast', 'sphericalcnn', 'fuxi', 'neuralgcm'cc]
+models = ['keisler', 'pangu', 'sphericalcnn', 'fuxi', 'neuralgcm'] #'graphcast'
 resolution = '240x121' #'1440x721' TODO: implement 1440x721
-lead_times = [np.timedelta64(12, 'h')]#[np.timedelta64(x, 'h') for x in range(12, 241, 12)]
+lead_times = [np.timedelta64(x, 'h') for x in range(12, 241, 12)]
 variables = ['T850', 'Z500'] # TODO: pass these to get_era5 and get_wb2_preds to have user-defined variables
 era5 = safe.data.climate.era5.get_era5(resolution)
 for model_name in models:
@@ -33,7 +33,7 @@ for model_name in models:
         polygon_edge_in_degrees=1.5,
     )
     loss_gdf.to_csv(f'outputs/weighted_l2_{model_name}_{resolution}.csv', index=False)
-    print(f'Execution tmie to get weighted l2: {time.time() - model_start}')
+    print(f'Execution time to get weighted l2: {time.time() - model_start}')
     metrics = safe.metrics.errors.stratified_rmse(
         loss_gdf,
         loss_metrics=['weighted_l2'],

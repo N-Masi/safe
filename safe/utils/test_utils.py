@@ -4,8 +4,10 @@ import math
 import numpy as np
 import xarray as xr
 import pygmt
+import shapely
 from utils.surface_area import *
 from utils.xarray_funcs import *
+from utils.geometry_funcs_funcs import *
 
 # https://mathworld.wolfram.com/OblateSpheroid.html
 # 2*math.pi*a*a+math.pi*(c**2/e)*math.log((1+e)/(1-e)) # inprecise to use python for calculation
@@ -351,3 +353,18 @@ def test_longitude_shifting():
     assert not np.allclose(ds.to_dataarray(), shifted_ds.to_dataarray())
     for i in range(num_lon//2):
         assert np.allclose(ds.isel(longitude=i).to_dataarray(), shifted_ds.isel(longitude=(i+n_shift)%num_lon).to_dataarray())
+
+def test_antimeridian_splitting():
+    for lon in [180, -180]:
+        point = shapely.Point(lon, 42)
+        poly = square_polygons_from_points([point], polygon_edge_in_degrees=1.5)
+        assert len(poly) == 1
+        poly = poly[0]
+        assert type(poly) == shapely.MultiPolygon
+        intersecting_point = shapely.Point(-179.9, 41.8)
+        assert poly.intersects(intersecting_point)
+        intersecting_point2 = shapely.Point(179.8, 41.8)
+        assert poly.intersects(intersecting_point2)
+        non_intersecting_point = shapely.Point(-71.4, 41.8)
+        assert not poly.intersects(non_intersecting_point)
+    

@@ -49,7 +49,7 @@ def stratified_rmse(
     gdf = gpd.GeoDataFrame(gdf, geometry=gdf['geometry'])
     gdf = gdf.set_geometry('geometry').set_crs(4326)
 
-    baseline = rmse_calculator(losses, losses.variable.unique(), losses.lead_time.unique(), loss_metrics, added_cols)
+    baseline = rmse_wrapper(losses, losses.variable.unique(), losses.lead_time.unique(), loss_metrics, added_cols)
     # TODO: get rmse at each individual point
     output.update({'baseline': baseline})
 
@@ -59,7 +59,7 @@ def stratified_rmse(
         df = pd.DataFrame()
         for territory in joined_gdf['shapeGroup'].unique():
             trimmed_gdf = joined_gdf[joined_gdf.shapeGroup==territory]
-            data = rmse_calculator(trimmed_gdf, trimmed_gdf.variable.unique(), trimmed_gdf.lead_time.unique(), loss_metrics, added_cols)
+            data = rmse_wrapper(trimmed_gdf, trimmed_gdf.variable.unique(), trimmed_gdf.lead_time.unique(), loss_metrics, added_cols)
             data['territory'] = territory
             df = pd.concat([df, data], ignore_index=True)
         output.update({'territory': df})
@@ -72,7 +72,7 @@ def stratified_rmse(
             # gdf is based on territory, don't double count data twice within the same subregion
             trimmed_gdf = trimmed_gdf[~trimmed_gdf.duplicated(subset=['geometry', 'variable', 'lead_time', 'UNSDG-subregion'], keep='last')]
             
-            data = rmse_calculator(trimmed_gdf, trimmed_gdf.variable.unique(), trimmed_gdf.lead_time.unique(), loss_metrics, added_cols)
+            data = rmse_wrapper(trimmed_gdf, trimmed_gdf.variable.unique(), trimmed_gdf.lead_time.unique(), loss_metrics, added_cols)
             data['subregion'] = subregion
             df = pd.concat([df, data], ignore_index=True)
         output.update({'subregion': df})
@@ -87,7 +87,7 @@ def stratified_rmse(
             # gdf is based on territory, don't double count data twice within the same income group
             trimmed_gdf = trimmed_gdf[~trimmed_gdf.duplicated(subset=['geometry', 'variable', 'lead_time', 'worldBankIncomeGroup'], keep='last')]
             
-            data = rmse_calculator(trimmed_gdf, trimmed_gdf.variable.unique(), trimmed_gdf.lead_time.unique(), loss_metrics, added_cols)
+            data = rmse_wrapper(trimmed_gdf, trimmed_gdf.variable.unique(), trimmed_gdf.lead_time.unique(), loss_metrics, added_cols)
             data['income'] = income
             df = pd.concat([df, data], ignore_index=True)
         output.update({'income': df})
