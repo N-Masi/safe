@@ -17,6 +17,7 @@ models = ['graphcast', 'keisler', 'pangu', 'sphericalcnn', 'fuxi', 'neuralgcm']
 resolution = '240x121'
 lead_times = [np.timedelta64(x, 'h') for x in range(12, 241, 12)]
 era5 = safe.data.climate.era5.get_era5(resolution)
+data = []
 for model_name in models:
     preds = safe.data.climate.wb2.get_wb2_preds(model_name, resolution, lead_times)
     loss_gdf = safe.metrics.losses.climate_weighted_l2(
@@ -35,5 +36,5 @@ for model_name in models:
         strata_groups='all',
         added_cols={'model': model_name}
     )
-    with open(f'outputs/metrics_{model_name}_{resolution}.pkl', 'wb') as f:
-        pickle.dump(metrics, f)
+    data.append(metrics)
+safe.viz.viz_metrics.territories(metrics)

@@ -1,3 +1,10 @@
+[build-system]
+requires = ["hatchling >= 1.26"]
+build-backend = "hatchling.build"
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
 [project]
 name = "safe-earth"
 version = "0.0.1"
@@ -15,7 +22,7 @@ dependencies = [
   'pickle',
   'pytest',
   'requests_cache',
-  'pygeoboundaries_geolab @ git+https://github.com/N-Masi/pygeoboundaries.git',
+  'pygeoboundaries-geolab',
   'kaleido'
 ]
 authors = [
@@ -26,3 +33,8 @@ authors = [
 description = "Stratified Assessments of Forecasts over Earth"
 readme = "README.md"
 keywords = ["fairness", "machine learning", "climate", "weather", "earth", "stratification"]
+license = "MIT"
+license-files = ["LICENSE"]
+
+[project.urls]
+Repository = "https://github.com/N-Masi/safe"
