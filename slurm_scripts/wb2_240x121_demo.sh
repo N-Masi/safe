@@ -4,7 +4,7 @@
 #SBATCH --mem=120G
 
 # Specify a job name:
-#SBATCH -J generate_gdf_Data
+#SBATCH -J generate_metrics
 #SBATCH -o %x.out
 
 

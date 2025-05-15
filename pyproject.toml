@@ -1,5 +1,5 @@
 [project]
-name = "safe"
+name = "safe-earth"
 version = "0.0.1"
 dependencies = [
   'numpy',
