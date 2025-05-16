@@ -5,9 +5,12 @@ Stratified Assessment of Forecasts over Earth
 
 `pip install safe-earth`
 
+To build from source: `git clone git@github.com:N-Masi/safe.git`
+
 ### Example
 
-...
+An example of using the package to collect metrics on 6 AIWP models across the territory, subregion, and income 
+attributes is availabe in `demos/wb2_240x121.py`. It assesses the models using 2020 ERA5 data.
 
 ### Data Notes
 

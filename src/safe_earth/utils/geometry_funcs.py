@@ -1,5 +1,7 @@
 import shapely
-from typing import List
+from typing import List, Union
+import pandas as pd
+import geopandas as gpd
 
 # TODO: support automatic per-point edge length detection to handle non-equiangularity
 def square_polygons_from_points(
@@ -29,7 +31,7 @@ def square_polygons_from_points(
 def point_to_square_polygon(
         point: shapely.Point,
         polygon_edge_in_degrees: float,
-    ) -> shapely.Polygon | shapely.MultiPolygon:
+    ) -> Union[shapely.Polygon, shapely.MultiPolygon]:
     '''
     Helper function that takes in one Point and gets the square polygon
     including it subject to the constraints of the coordinate system defined
@@ -75,3 +77,9 @@ def split_antimeridian_square(
     ])
     
     return shapely.MultiPolygon([left, right])
+
+# TODO: add conversion for other columns passed in as dict from name to type
+def df2gdf(df: pd.DataFrame) -> gpd.GeoDataFrame:
+    df['geometry'] = df['geometry'].apply(shapely.wkt.loads)
+    gdf = gpd.GeoDataFrame(df, geometry='geometry')
+    return gdf

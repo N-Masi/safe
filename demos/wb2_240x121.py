@@ -37,4 +37,6 @@ for model_name in models:
         added_cols={'model': model_name}
     )
     data.append(metrics)
-safe_earth.viz.viz_metrics.territories(metrics)
+safe_earth.viz.viz_metrics.incomes(metrics, show=True)
+safe_earth.viz.viz_metrics.incomes(metrics, show=True)
+safe_earth.viz.viz_metrics.subregions(metrics, show=True, lead_time_max=48)
