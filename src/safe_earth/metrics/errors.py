@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 from shapely import wkt
 from typing import List
-from safe.utils.errors import *
+from safe_earth.utils.errors import *
 import pdb
 
 def stratified_rmse(

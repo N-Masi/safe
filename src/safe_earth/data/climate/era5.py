@@ -1,3 +1,8 @@
+'''
+The data returned from the get_era5 method in this file contains 
+modified Copernicus Climate Change Service information 2025.
+'''
+
 from typing import Literal, List
 import numpy as np
 import pandas as pd
@@ -6,7 +11,7 @@ import zarr
 import cfgrib
 import gcsfs
 import fsspec
-from safe.data.climate import wb2_stores
+from safe_earth.data.climate import wb2_stores
 
 # TODO: support more resolutions
 # TODO: support user-defined variable selection

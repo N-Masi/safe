@@ -5,9 +5,9 @@ import numpy as np
 import xarray as xr
 import pygmt
 import shapely
-from utils.surface_area import *
-from utils.xarray_funcs import *
-from utils.geometry_funcs_funcs import *
+from safe_earth.utils.surface_area import *
+from safe_earth.utils.xarray_funcs import *
+from safe_earth.utils.geometry_funcs import *
 
 # https://mathworld.wolfram.com/OblateSpheroid.html
 # 2*math.pi*a*a+math.pi*(c**2/e)*math.log((1+e)/(1-e)) # inprecise to use python for calculation

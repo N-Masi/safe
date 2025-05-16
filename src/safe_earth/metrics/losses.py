@@ -2,8 +2,8 @@ import xarray as xr
 import geopandas as gpd
 import pandas as pd
 import shapely
-from safe.utils.surface_area import *
-from safe.utils.geometry_funcs import *
+from safe_earth.utils.surface_area import *
+from safe_earth.utils.geometry_funcs import *
 from typing import List
 import pdb
 
