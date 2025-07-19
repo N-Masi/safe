@@ -12,7 +12,7 @@ lead_times = [x for x in range(12, 241, 12)]
 categories = ['territory', 'subregion', 'income']
 
 for model in models:
-    with open(f'outputs/metrics_{model}_240x121.pkl', 'rb') as f:
+    with open(f'../outputs/metrics_{model}_240x121.pkl', 'rb') as f:
         metrics = pickle.load(f)
     
     for category in categories:
@@ -25,13 +25,25 @@ for model in models:
             zmin = np.min(data[data['variable']=='Z500'][data['lead_time']==lead_time]['rmse_weighted_l2'])
             df = pd.concat([df, pd.DataFrame([{'model': model, 'lead_time': lead_time, 'variable': 'Z500', 'rmse_diff': zmax-zmin, 'stratum': category}])], ignore_index=True)
 
-exit() # TODO: remove
+
+        # for calculating table reported data
+        # if category == 'income':
+        #     print(f'{model} | T850 | 12h: ' +
+        #         f'{df[df.variable=='T850'][df.lead_time==12][df.model==model][df.stratum==category].rmse_diff.values.item()} - 72h: ' +
+        #         f'{df[df.variable=='T850'][df.lead_time==72][df.model==model][df.stratum==category].rmse_diff.values.item()} - 240h: ' +
+        #         f'{df[df.variable=='T850'][df.lead_time==240][df.model==model][df.stratum==category].rmse_diff.values.item()} \n {model} | Z500 | ' +
+        #         f'12h: {df[df.variable=='Z500'][df.lead_time==12][df.model==model][df.stratum==category].rmse_diff.values.item()} - ' +
+        #         f'72h: {df[df.variable=='Z500'][df.lead_time==72][df.model==model][df.stratum==category].rmse_diff.values.item()} - ' +
+        #         f'240h: {df[df.variable=='Z500'][df.lead_time==240][df.model==model][df.stratum==category].rmse_diff.values.item()}')
+        #     pdb.set_trace()
+
 fig_T850 = px.line(
     df[df['variable']=='T850'],
     x='lead_time',
     y='rmse_diff',
     color='model',
     symbol='model',
+    symbol_sequence=['circle', 'square', 'diamond', 'cross', 'x', 'triangle-up'],
     facet_col='stratum',
     facet_col_spacing=0.08,
     labels={
@@ -49,7 +61,7 @@ fig_T850.update_xaxes(tickmode = 'array', tickvals = lead_times)
 fig_T850.update_yaxes(matches=None)
 fig_T850.for_each_yaxis(lambda yaxis: yaxis.update(showticklabels=True, range=[-0.05,5.15]))
 fig_T850.show()
-fig_T850.write_image('outputs/viz/rmse_diff_t850.png', width=1200, height=500, scale=8)
+fig_T850.write_image('../outputs/viz/rmse_diff_t850.pdf', width=1200, height=500, scale=8)
 
 fig_Z500 = px.line(
     df[df['variable']=='Z500'],
@@ -57,6 +69,7 @@ fig_Z500 = px.line(
     y='rmse_diff',
     color='model',
     symbol='model',
+    symbol_sequence=['circle', 'square', 'diamond', 'cross', 'x', 'triangle-up'],
     facet_col='stratum',
     facet_col_spacing=0.08,
     labels={
@@ -74,5 +87,5 @@ fig_Z500.update_xaxes(tickmode = 'array', tickvals = lead_times)
 fig_Z500.update_yaxes(matches=None)
 fig_Z500.for_each_yaxis(lambda yaxis: yaxis.update(showticklabels=True, range=[-10,1410]))
 fig_Z500.show()
-fig_Z500.write_image('outputs/viz/rmse_diff_z500.png', width=1200, height=500, scale=8)
+fig_Z500.write_image('../outputs/viz/rmse_diff_z500.pdf', width=1200, height=500, scale=8)
 

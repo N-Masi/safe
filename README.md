@@ -7,6 +7,8 @@ Stratified Assessment of Forecasts over Earth
 
 To build from source: `git clone git@github.com:N-Masi/safe.git`
 
+When running directly from the source repository, run files with `python -m safe_earth.<directory>.<file_without_extension>` while in the `src/` subdirectory.
+
 ### Example
 
 An example of using the package to collect metrics on 6 AIWP models across the territory, subregion, and income 

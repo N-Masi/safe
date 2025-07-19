@@ -44,7 +44,7 @@ def stratified_rmse(
     '''
     output = {}
 
-    gdf = gpd.GeoDataFrame(gpd.read_file('safe/data/strata/gdf_region_income.csv'))
+    gdf = gpd.GeoDataFrame(gpd.read_file('safe_earth/data/strata/gdf_territory_region_income.csv'))
     gdf['geometry'] = gdf['geometry'].apply(wkt.loads)
     gdf = gpd.GeoDataFrame(gdf, geometry=gdf['geometry'])
     gdf = gdf.set_geometry('geometry').set_crs(4326)

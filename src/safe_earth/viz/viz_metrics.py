@@ -120,7 +120,7 @@ def incomes(metrics: Union[dict, List[dict]], show: bool = False, lead_time_max 
 
     if show:
         fig.show()
-        fig.write_image('../outputs/viz/viz_income.png', width=1200, height=500, scale=8)
+        fig.write_image('../outputs/viz/viz_income.pdf', width=1200, height=500, scale=8)
     else:
         return fig
     
@@ -133,6 +133,6 @@ if __name__ == '__main__':
         with open(f'../outputs/metrics_{model}_{resolution}.pkl', 'rb') as f:
             metrics = pickle.load(f)
         data.append(metrics)
-    # incomes(data, show=True)
-    # incomes(data, show=True, lead_time_max=48)
-    subregions(data, show=True)
+    incomes(data, show=True)
+    # # incomes(data, show=True, lead_time_max=48)
+    # subregions(data, show=True)
