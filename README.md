@@ -1,6 +1,8 @@
 # SAFE
 Stratified Assessment of Forecasts over Earth
 
+[Preprint](https://n-masi.github.io/papers/safe_masi.pdf) and [Website](https://n-masi.github.io/safe)
+
 ### Installation
 
 `pip install safe-earth`
