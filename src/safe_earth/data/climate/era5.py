@@ -16,7 +16,7 @@ from safe_earth.data.climate import wb2_stores
 # TODO: support more resolutions
 # TODO: support user-defined variable selection
 def get_era5(
-        resolution: Literal['240x121'],
+        resolution: Literal['240x121', '1440x721'],
         time: slice = slice('2020-01-01T00', '2021-01-11T00'),
     ) -> xr.Dataset:
     '''

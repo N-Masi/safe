@@ -1,2 +1,2 @@
-from .era5 import get_era5
-from .wb2 import get_wb2_preds
+import safe_earth.data.climate.era5
+import safe_earth.data.climate.wb2
