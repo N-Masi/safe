@@ -5,7 +5,6 @@ __pycache__/*
 sandbox
 sandbox/*
 outputs/*
-outputs-tmp
 *.out
 dist/*
 dist

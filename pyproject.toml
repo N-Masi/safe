@@ -10,7 +10,7 @@ pythonpath = ["src"]
 
 [project]
 name = "safe-earth"
-version = "0.0.4"
+version = "0.0.5"
 dependencies = [
   'numpy',
   'pandas',
@@ -28,7 +28,7 @@ dependencies = [
   'kaleido'
 ]
 authors = [
-  {name = "Nick Masi", email = "nicholas_masi@brown.edu"},
+  {name = "Nick Masi", email = "nicholas_masi@alumni.brown.edu"},
   {name = "Daniel Cai", email = "daniel_cai@brown.edu"},
   {name = "Randall Balestriero", email = "randall_balestriero@brown.edu"}
 ]
@@ -39,4 +39,5 @@ license = "MIT"
 license-files = ["LICENSE"]
 
 [project.urls]
-Repository = "https://github.com/N-Masi/safe"
+Repository = "https://github.com/n-masi/safe"
+Homepage = "https://n-masi.github.io/safe/"

@@ -7,16 +7,26 @@ Stratified Assessment of Forecasts over Earth
 
 `pip install safe-earth`
 
-To build from source: `git clone git@github.com:N-Masi/safe.git`
-
-After building from source, create a dev environment with the following steps
+To build from source instead:
 
 ```
+# get repo
+git clone git@github.com:N-Masi/safe.git
+
+# create dev environment
 conda create -n safe.env
 conda activate safe.env
 pip install --file requirements.txt
 conda install --channel conda-forge pygmt plotly typing_extensions
 ```
+<!-- 
+If you are an authorized contributor and want to upload a new version to pypi: 
+
+```
+python3 -m build
+python3 -m twine upload dist/*
+```
+-->
 
 <!-- When running directly from the source repository, run files with `python -m safe_earth.<directory>.<file_without_extension>` while in the `src/` subdirectory. -->
 
