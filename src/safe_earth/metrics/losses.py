@@ -30,10 +30,10 @@ def climate_weighted_l2(
         The data which has all of the ground truth data for all of the 
         variables in data. Loss will be calculated for every variable
         that is in both data and ground_truth.
-    lon_dim: str
+    lon_dim: str TODO: default of None & dynamically handle common values (lon, long, longitude)
         The name of the dimension that stores the longitude in both data and
         ground_truth arrays.
-    lat_dim: str
+    lat_dim: str TODO: default of None & dynamically handle common values (lat, latitude)
         The name of the dimension that stores the latitude in both data and
         ground_truth arrays.
     lead_time_dim: str
