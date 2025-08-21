@@ -4,9 +4,8 @@ import numpy as np
 from shapely import wkt
 from typing import List
 from safe_earth.utils.errors import *
-from safe_earth.data.strata import *
+from safe_earth.data.strata.generate_gdf import *
 import pdb
-
 def stratified_rmse(
         losses: gpd.GeoDataFrame,
         loss_metrics: List[str],
@@ -48,7 +47,7 @@ def stratified_rmse(
     if need_to_download_gdf_file():
         generate_gdf_file()
 
-    gdf = gpd.GeoDataFrame(gpd.read_file('safe_earth/data/strata/gdf_territory_region_income.csv'))
+    gdf = gpd.GeoDataFrame(gpd.read_file(os.getcwd()+'/gdf_territory_region_income.csv'))
     gdf['geometry'] = gdf['geometry'].apply(wkt.loads)
     gdf = gpd.GeoDataFrame(gdf, geometry=gdf['geometry'])
     gdf = gdf.set_geometry('geometry').set_crs(4326)
@@ -61,8 +60,8 @@ def stratified_rmse(
 
     if 'territory' in strata_groups or 'all' in strata_groups:
         df = pd.DataFrame()
-        for territory in joined_gdf['shapeGroup'].unique():
-            trimmed_gdf = joined_gdf[joined_gdf.shapeGroup==territory]
+        for territory in joined_gdf['shapeName'].unique():
+            trimmed_gdf = joined_gdf[joined_gdf.shapeName==territory]
             data = rmse_wrapper(trimmed_gdf, trimmed_gdf.variable.unique(), trimmed_gdf.lead_time.unique(), loss_metrics, added_cols)
             data['territory'] = territory
             df = pd.concat([df, data], ignore_index=True)
