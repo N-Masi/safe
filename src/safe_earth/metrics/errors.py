@@ -4,6 +4,7 @@ import numpy as np
 from shapely import wkt
 from typing import List
 from safe_earth.utils.errors import *
+from safe_earth.data.strata import *
 import pdb
 
 def stratified_rmse(
@@ -43,6 +44,9 @@ def stratified_rmse(
         in a dataframe with the key 'baseline'.
     '''
     output = {}
+
+    if need_to_download_gdf_file():
+        generate_gdf_file()
 
     gdf = gpd.GeoDataFrame(gpd.read_file('safe_earth/data/strata/gdf_territory_region_income.csv'))
     gdf['geometry'] = gdf['geometry'].apply(wkt.loads)
