@@ -6,6 +6,7 @@ from typing import List
 from safe_earth.utils.errors import *
 from safe_earth.data.strata.generate_gdf import *
 import pdb
+
 def stratified_rmse(
         losses: gpd.GeoDataFrame,
         loss_metrics: List[str],

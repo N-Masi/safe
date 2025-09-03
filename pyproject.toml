@@ -10,7 +10,7 @@ pythonpath = ["src"]
 
 [project]
 name = "safe-earth"
-version = "0.0.16"
+version = "0.0.18"
 dependencies = [
   'numpy',
   'pandas',
