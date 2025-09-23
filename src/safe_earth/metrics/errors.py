@@ -48,7 +48,18 @@ def stratified_rmse(
     if need_to_download_gdf_file():
         generate_gdf_file()
 
-    gdf = gpd.GeoDataFrame(gpd.read_file(os.getcwd()+'/gdf_territory_region_income.csv'))
+    if os.path.exists(os.getcwd()+'/gdf_territory_region_income.csv'):
+        path = os.getcwd()+'/gdf_territory_region_income.csv'
+    elif os.path.exists('safe_earth/data/strata/gdf_territory_region_income.csv'):
+        path = 'safe_earth/data/strata/gdf_territory_region_income.csv'
+    elif os.path.exists(os.getcwd()+'src/safe_earth/data/strata/gdf_territory_region_income.csv'):
+        path = os.getcwd()+'src/safe_earth/data/strata/gdf_territory_region_income.csv'
+    elif os.path.exists('src/safe_earth/data/strata/gdf_territory_region_income.csv'):
+        path = 'src/safe_earth/data/strata/gdf_territory_region_income.csv'
+    else:
+        raise OSError('Ill specified path for strata data')
+
+    gdf = gpd.GeoDataFrame(gpd.read_file(path))
     gdf['geometry'] = gdf['geometry'].apply(wkt.loads)
     gdf = gpd.GeoDataFrame(gdf, geometry=gdf['geometry'])
     gdf = gdf.set_geometry('geometry').set_crs(4326)
@@ -95,5 +106,18 @@ def stratified_rmse(
             data['income'] = income
             df = pd.concat([df, data], ignore_index=True)
         output.update({'income': df})
+
+    if 'landcover' in strata_groups or 'all' in strata_groups:
+        df = pd.DataFrame()
+        land_gdf = joined_gdf[~pd.isna(joined_gdf.shapeName)]
+        land_gdf = land_gdf[~land_gdf.duplicated(subset=['geometry', 'variable', 'lead_time'], keep='last')]
+        land_data = rmse_wrapper(land_gdf, land_gdf.variable.unique(), land_gdf.lead_time.unique(), loss_metrics, added_cols)
+        land_data['landcover'] = 'land'
+        water_gdf = joined_gdf[pd.isna(joined_gdf.shapeName)]
+        water_gdf = water_gdf[~water_gdf.duplicated(subset=['geometry', 'variable', 'lead_time'], keep='last')]
+        water_data = rmse_wrapper(water_gdf, water_gdf.variable.unique(), water_gdf.lead_time.unique(), loss_metrics, added_cols)
+        water_data['landcover'] = 'water'
+        df = pd.concat([df, land_data, water_data], ignore_index=True)
+        output.update({'landcover': df})
 
     return output
