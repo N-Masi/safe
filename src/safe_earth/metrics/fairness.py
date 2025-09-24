@@ -6,40 +6,64 @@ import functools
 import operator
 import pdb
 
-def greatest_abs_diff(
+def measure_fairness(
         dfs: dict[str, pd.DataFrame],
-        metric_names: List[str] = 'rmse_weighted_l2',
+        funcs: List,
+        metric_names: List[str] = ['rmse_weighted_l2'],
         attributes: List[str] = 'all',
         iterate_over: Optional[List[str]] = ['model', 'variable', 'lead_time']
     ) -> dict[str, pd.DataFrame]:
     '''
-    Get the greatest absolute difference in per-strata metric values for each
-    attribute for each combination of the values for the columns specified in
-    iterate_over. Returned as a dict from attribute (str) -> dataframe.
+    Return a dict from attribute (str) -> dataframe, with a column for each metric
     '''
-    # todo: validate list nature of args
-    output = dict()
+    # TODO: validate list nature of args
+    if not type(funcs) == list:
+        funcs = [funcs]
+    if (type(metric_names) != list) and (type(metric_names) != str):
+        raise ValueError(f'incorrect type for variable "metric_names", it must be list or str, given {type(metric_names)}')
+    elif type(metric_names) == str:
+        metric_names = [metric_names]
     if attributes == 'all':
         attributes = [k for k in dfs.keys() if k != 'baseline']
+    elif not type(attributes) == list:
+        raise ValueError(f'incorrect type for variable "attributes", it must be either "all" or a list')
+
+    output = dict()
 
     for attribute in attributes:
         df = dfs[attribute]
-        out_df = pd.DataFrame()
+        attr_output = []
         iter_cols = [k for k in iterate_over if k in df.columns]
         iter_combos = list(itertools.product(*[df[k].unique() for k in iter_cols]))
         for iter_vals in iter_combos:
             conditions = [(df[col] == val) for col, val in zip(iter_cols, iter_vals)]
-            pdb.set_trace()
             mask = functools.reduce(operator.and_, conditions)
-            curr_df = df[mask]
+            filtered_df = df[mask]
+            specific_metrics_entry = {k: v for k, v in zip(iter_cols, iter_vals)}
             for metric in metric_names:
-                pdb.set_trace()
-                # todo: calc vals for the masked df, then append to out_df
-        output[attribute] = out_df
-            
+                for func in funcs:
+                    specific_metrics_entry.update(func(filtered_df, metric))
+            attr_output.append(specific_metrics_entry)
+        output[attribute] = pd.DataFrame(attr_output)
+
     return output
 
+def greatest_abs_diff(
+        df: pd.DataFrame,
+        metric: str
+    ) -> dict:
+    varmax = np.max(df[metric])
+    varmin = np.min(df[metric])    
+    return {f'gad_{metric}': varmax-varmin}
+
 def variance(
-        
-    ):
-    pass
+        df: pd.DataFrame,
+        metric: str
+    ) -> dict:
+    return {f'variance_{metric}': np.var(df[metric])}
+
+def standard_deviation(
+        df: pd.DataFrame,
+        metric: str
+    ) -> dict:
+    return {f'std_{metric}': np.std(df[metric])}
