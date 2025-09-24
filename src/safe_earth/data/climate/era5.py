@@ -43,7 +43,9 @@ def get_era5(
     era5 = xr.open_zarr(
         store,
         storage_options={"token": "anon"}, 
-        consolidated=True
+        consolidated=True,
+        decode_times=True, 
+        decode_timedelta=True
     )
     era5 = era5.sel(time=time)
 

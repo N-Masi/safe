@@ -133,7 +133,7 @@ def stratified_rmse(
         water_data = rmse_wrapper(water_gdf, water_gdf.variable.unique(), water_gdf.lead_time.unique(), loss_metrics, added_cols)
         for d in water_data:
             d['landcover'] = 'water'
-        df = [land_data, water_data]
+        df = land_data+water_data
         output.update({'landcover': pd.DataFrame(df)})
 
     return output

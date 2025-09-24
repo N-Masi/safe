@@ -319,7 +319,9 @@ def test_latitude_flipping():
     ds = xr.open_zarr(
         'gs://weatherbench2/datasets/era5/1959-2023_01_10-6h-64x32_equiangular_conservative.zarr', 
         storage_options={"token": "anon"}, 
-        consolidated=True)
+        consolidated=True,
+        decode_times=True, 
+        decode_timedelta=True)
     ds = ds.isel(time=0)
     ds = ds[['2m_temperature', 'wind_speed']]
     flipped_ds = flip_xarray_over_equator(ds, 'latitude')
@@ -343,7 +345,9 @@ def test_longitude_shifting():
     ds = xr.open_zarr(
         'gs://weatherbench2/datasets/era5/1959-2023_01_10-6h-64x32_equiangular_conservative.zarr', 
         storage_options={"token": "anon"}, 
-        consolidated=True)
+        consolidated=True,
+        decode_times=True, 
+        decode_timedelta=True)
     ds = ds.isel(time=0)
     ds = ds[['2m_temperature', 'wind_speed']]
     num_lon = len(ds.longitude.values)

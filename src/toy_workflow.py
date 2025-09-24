@@ -24,8 +24,8 @@ import platform
 
 model = 'graphcast'
 resolution = '240x121'
-lead_times = [np.timedelta64(x, 'h') for x in range(12, 13, 12)]
-variables = [ERA5Var('2m_temperature', name='T2M')]#, ERA5Var('temperature', 850, 'T850')]
+lead_times = [np.timedelta64(x, 'h') for x in range(12, 25, 12)]
+variables = [ERA5Var('2m_temperature', name='T2M'), ERA5Var('temperature', 850, 'T850')]
 
 print('about to load data')
 
@@ -54,7 +54,8 @@ strata_metrics = safe_earth.metrics.errors.stratified_rmse(
 
 print('moving onto fairness')
 
-diffs = fairness.greatest_abs_diff(strata_metrics)
+diffs = fairness.measure_fairness(strata_metrics, funcs=[fairness.greatest_abs_diff, fairness.variance])
 
+pdb.set_trace()
 
 # TODO: graph landcover metrics

@@ -22,7 +22,7 @@ def get_wb2_preds(
         raise ValueError(f'Resolution {resolution} not available for model {model_name}, check data/wb2_stores.py')
 
     # TODO: ccai reviewer #2 had auth issues, investigate
-    ds = xr.open_zarr(wb2_stores.models[model_name][resolution])
+    ds = xr.open_zarr(wb2_stores.models[model_name][resolution], decode_times=True, decode_timedelta=True)
     ds = ds.sel(time=time)
 
     for v in variables:
