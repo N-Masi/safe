@@ -22,7 +22,7 @@ import platform
 models = ['graphcast', 'keisler', 'pangu', 'sphericalcnn', 'fuxi', 'neuralgcm']
 resolution = '240x121'
 lead_times = [np.timedelta64(x, 'h') for x in range(12, 241, 12)]
-variables = [ERA5Var('temperature', 850, 'T850'), ERA5Var('temperature', 850, 'T850')]
+variables = [ERA5Var('temperature', 850, 'T850'), ERA5Var('geopotential', 500, 'Z500')]
 era5 = safe_earth.data.climate.era5.get_era5(resolution, variables=variables)
 
 test = ['hello']
@@ -68,7 +68,7 @@ for model in models:
 
     print('saving fairness results', flush=True)
 
-    with open(f'outputs/results_{model}_{resolution}.pkl', 'wb') as f:
+    with open(f'outputs/results_{model}_{resolution}_Z500.pkl', 'wb') as f:
         pickle.dump(diffs, f)
 
 print('completed successfully!', flush=True)
