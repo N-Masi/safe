@@ -9,7 +9,7 @@ def rmse_wrapper(
         lead_times: list, 
         loss_metrics: List[str],
         added_cols: dict[str, str] = None
-    ) -> pd.DataFrame:
+    ) -> List[dict]:
 
     output = []
     for variable in variables: # TODO: generalize to any dimension that isn't geometry or in loss_metrics
@@ -20,7 +20,7 @@ def rmse_wrapper(
                 rmse = rmse_calculator(gdf[gdf.variable==variable][gdf.lead_time==lead_time], metric)
                 data.update({f'rmse_{metric}': rmse})
             output.append(data)
-    return pd.DataFrame(output)
+    return output
 
 def rmse_calculator(
         gdf: gpd.GeoDataFrame,

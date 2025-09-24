@@ -81,7 +81,7 @@ def climate_weighted_l2(
     lat_weights = get_cell_weights((data.sizes[lon_dim], data.sizes[lat_dim]), lat_index=1)
     variables = [v for v in data.data_vars if v in ground_truth.data_vars]
 
-    output_gdf = gpd.GeoDataFrame()
+    output_gdf = []#gpd.GeoDataFrame()
     for lead_time in data[lead_time_dim]:
         lead_time_int = np.timedelta64(lead_time.values, 'h').astype(int)
         # TODO: call general/non-climate method that does the looping over variables
@@ -119,6 +119,7 @@ def climate_weighted_l2(
             gdf['variable'] = variable
             gdf['lead_time'] = lead_time_int
 
-            output_gdf = pd.concat([output_gdf, gdf], ignore_index=True)
+            output_gdf.append(gdf)
+            # output_gdf = pd.concat([output_gdf, gdf], ignore_index=True)
 
-    return output_gdf
+    return pd.concat(output_gdf, ignore_index=True)
