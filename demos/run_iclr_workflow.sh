@@ -7,7 +7,7 @@
 #SBATCH -J generate_iclr_metrics
 #SBATCH -o %x-%j.out
 
-
+# run command from safe/ directory, with command `sbatch demos/run_iclr_workflow.sh`
 
 # Set up the environment by loading modules
 module load cuda cudnn

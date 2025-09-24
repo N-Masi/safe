@@ -22,10 +22,10 @@ import platform
 models = ['graphcast', 'keisler', 'pangu', 'sphericalcnn', 'fuxi', 'neuralgcm']
 resolution = '240x121'
 lead_times = [np.timedelta64(x, 'h') for x in range(12, 241, 12)]
-variables = [ERA5Var('2m_temperature', name='T2M'), ERA5Var('temperature', 850, 'T850'), ERA5Var('temperature', 850, 'T850')]
+variables = [ERA5Var('temperature', 850, 'T850'), ERA5Var('temperature', 850, 'T850')]
 era5 = safe_earth.data.climate.era5.get_era5(resolution, variables=variables)
 
-test = ['hi']
+test = ['hello']
 with open(f'outputs/results_test.pkl', 'wb') as f:
         pickle.dump(test, f)
 
