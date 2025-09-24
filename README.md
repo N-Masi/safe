@@ -32,8 +32,8 @@ python3 -m twine upload dist/*
 
 ### Example
 
-An example of using the package to collect metrics on 6 AIWP models across the territory, subregion, and income 
-attributes is availabe in `demos/wb2_240x121.py`. It assesses the models using 2020 ERA5 data.
+An example of using the package to collect metrics on 6 AIWP models across the territory, subregion, income, and landcover
+attributes is availabe in `demos/iclr_workflow.py`. It assesses the models using 2020 ERA5 data.
 
 ### Data Notes
 
