@@ -45,8 +45,8 @@ def stratified_rmse(
     '''
     output = {}
 
-    if need_to_download_gdf_file():
-        path = generate_gdf_file()
+    # if need_to_download_gdf_file():
+    #     path = generate_gdf_file()
 
     # TODO: should be able to remove this chunk by making path user definable, 
     # both here and in the generate_gdf.py funcs
@@ -61,6 +61,7 @@ def stratified_rmse(
     else:
         try:
             path = generate_gdf_file()
+            print(f'new strata file downloaded at {path}')
         except:
             raise OSError('Ill specified path for strata data')
 
@@ -74,32 +75,34 @@ def stratified_rmse(
 
     baseline = rmse_wrapper(losses, losses.variable.unique(), losses.lead_time.unique(), loss_metrics, added_cols)
     # TODO: get rmse at each individual point
-    output.update({'baseline': baseline})
+    output.update({'baseline': pd.DataFrame(baseline)})
 
     joined_gdf = gpd.sjoin(losses, gdf, how="left", predicate="intersects").reset_index(drop=True)
 
     if 'territory' in attributes or 'all' in attributes:
         df = []
         for territory in joined_gdf['shapeName'].unique():
-            trimmed_gdf = joined_gdf[joined_gdf.shapeName==territory]
-            data = rmse_wrapper(trimmed_gdf, trimmed_gdf.variable.unique(), trimmed_gdf.lead_time.unique(), loss_metrics, added_cols)
-            for d in data:
-                d['territory'] = territory
-            df.append(data)
+            if not pd.isna(territory):
+                trimmed_gdf = joined_gdf[joined_gdf.shapeName==territory]
+                data = rmse_wrapper(trimmed_gdf, trimmed_gdf.variable.unique(), trimmed_gdf.lead_time.unique(), loss_metrics, added_cols)
+                for d in data:
+                    d['territory'] = territory
+                df += data
         output.update({'territory': pd.DataFrame(df)})
 
     if 'subregion' in attributes or 'all' in attributes:
         df = []
         for subregion in joined_gdf['UNSDG-subregion'].unique():
-            trimmed_gdf = joined_gdf[joined_gdf['UNSDG-subregion']==subregion]
+            if not pd.isna(subregion):
+                trimmed_gdf = joined_gdf[joined_gdf['UNSDG-subregion']==subregion]
 
-            # gdf is based on territory, don't double count data twice within the same subregion
-            trimmed_gdf = trimmed_gdf[~trimmed_gdf.duplicated(subset=['geometry', 'variable', 'lead_time', 'UNSDG-subregion'], keep='last')]
-            
-            data = rmse_wrapper(trimmed_gdf, trimmed_gdf.variable.unique(), trimmed_gdf.lead_time.unique(), loss_metrics, added_cols)
-            for d in data:
-                d['subregion'] = subregion
-            df.append(data)
+                # gdf is based on territory, don't double count data twice within the same subregion
+                trimmed_gdf = trimmed_gdf[~trimmed_gdf.duplicated(subset=['geometry', 'variable', 'lead_time', 'UNSDG-subregion'], keep='last')]
+                
+                data = rmse_wrapper(trimmed_gdf, trimmed_gdf.variable.unique(), trimmed_gdf.lead_time.unique(), loss_metrics, added_cols)
+                for d in data:
+                    d['subregion'] = subregion
+                df += data
         output.update({'subregion': pd.DataFrame(df)})
 
     if 'income' in attributes or 'all' in attributes:
@@ -107,15 +110,16 @@ def stratified_rmse(
         incomes = joined_gdf['worldBankIncomeGroup'].unique()
         incomes = [x for x in incomes if not x == 'No income group available']
         for income in incomes:
-            trimmed_gdf = joined_gdf[joined_gdf['worldBankIncomeGroup']==income]
+            if not pd.isna(income):
+                trimmed_gdf = joined_gdf[joined_gdf['worldBankIncomeGroup']==income]
 
-            # gdf is based on territory, don't double count data twice within the same income group
-            trimmed_gdf = trimmed_gdf[~trimmed_gdf.duplicated(subset=['geometry', 'variable', 'lead_time', 'worldBankIncomeGroup'], keep='last')]
-            
-            data = rmse_wrapper(trimmed_gdf, trimmed_gdf.variable.unique(), trimmed_gdf.lead_time.unique(), loss_metrics, added_cols)
-            for d in data:
-                d['income'] = income
-            df.append(data)
+                # gdf is based on territory, don't double count data twice within the same income group
+                trimmed_gdf = trimmed_gdf[~trimmed_gdf.duplicated(subset=['geometry', 'variable', 'lead_time', 'worldBankIncomeGroup'], keep='last')]
+                
+                data = rmse_wrapper(trimmed_gdf, trimmed_gdf.variable.unique(), trimmed_gdf.lead_time.unique(), loss_metrics, added_cols)
+                for d in data:
+                    d['income'] = income
+                df += data
         output.update({'income': pd.DataFrame(df)})
 
     if 'landcover' in attributes or 'all' in attributes:
