@@ -1,10 +1,3 @@
-# TO RUN:
-# 0. activate environment (conda activate faireenvconda)
-# 1. move the file to the src/ directory
-# 2. cd src/
-# 3. python -m toy_workflow
-
-
 import sys
 import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))

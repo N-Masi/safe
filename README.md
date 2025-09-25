@@ -32,8 +32,17 @@ python3 -m twine upload dist/*
 
 ### Example
 
-An example of using the package to collect metrics on 6 AIWP models across the territory, subregion, income, and landcover
-attributes is availabe in `demos/iclr_workflow.py`. It assesses the models using 2020 ERA5 data.
+An example of using the package to collect metrics on 6 AIWP models across the territory, subregion, income, and landcover attributes is availabe in `demos/iclr_workflow.py`. It assesses the models using 2020 ERA5 data.
+
+<!-- Instructions to run on OSCAR:
+
+# TO RUN:
+# 0. activate environment (conda activate faireenvconda)
+# 1. move the file to the src/ directory
+# 2. cd src/
+# 3. python -m toy_workflow
+
+-->
 
 ### Data Notes
 
