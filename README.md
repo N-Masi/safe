@@ -41,4 +41,4 @@ To unify the coordinate system across all integrated data sources, latitude rang
 
 ### Testing
 
-Run `pytest` in the of the source repository directory.
+Run `pytest` in the terminal of the repo directory while in python environment that has pytest installed.

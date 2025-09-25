@@ -46,9 +46,6 @@ for model in models:
         lead_time_dim='prediction_timedelta'
     )
 
-    # with open(f'outputs/losses_{model}_{resolution}.pkl', 'wb') as f:
-    #     pickle.dump(loss_gdf, f)
-
     print('about to run errors', flush=True)
 
     attributes = 'all'
@@ -59,18 +56,13 @@ for model in models:
         added_cols={'model': model}
     )
 
-    # with open(f'outputs/errors_{model}_{resolution}.pkl', 'wb') as f:
-    #     pickle.dump(strata_metrics, f)
-
     print('moving onto fairness', flush=True)
 
     diffs = fairness.measure_fairness(strata_metrics, funcs=[fairness.greatest_abs_diff, fairness.variance])
 
     print('saving fairness results', flush=True)
 
-    with open(f'outputs/results_{model}_{resolution}_Z500.pkl', 'wb') as f:
+    with open(f'outputs/results_{model}_{resolution}.pkl', 'wb') as f:
         pickle.dump(diffs, f)
 
 print('completed successfully!', flush=True)
-
-# TODO: graph landcover metrics
