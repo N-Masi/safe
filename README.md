@@ -54,7 +54,9 @@ For now, loss functions should create dataframes with columns for the output of 
 
 ### Demos
 
-An example of using the package to collect metrics on 6 AIWP models across the territory, subregion, income, and landcover attributes is availabe in `demos/iclr_workflow.py`. It assesses the models using 2020 ERA5 data.
+An example of using SAFE to collect metrics on 6 AIWP models across the territory, subregion, income, and landcover attributes is availabe in `demos/iclr_workflow.py`. It generates error and fairness data by assessing the models on 2020 ERA5 data. To see the type of analysis that can be performed with this data, you can reproduce the figures and tables from the paper by running `demos/iclr_figs.py` and `demos/iclr_tables.py`, respectively.
+
+An interactive notebook utilizing SAFE to investigate territorial disparities is available in `demos/interactive_demo.ipynb`.
 
 <!-- Instructions to run on OSCAR:
 
