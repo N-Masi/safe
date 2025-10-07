@@ -72,6 +72,20 @@ def fig4(df: pd.DataFrame, show: bool = True, save_path: str = 'outputs/viz/iclr
     '''
     Plot Figure 4. Analysis of the landcover attribute.
     '''
+    # TODO: should this plot include baseline?
+    df = df[df['attribute']=='landcover']
+    fig = px.line(
+        df,
+        x='lead_time',
+        y='rmse_weighted_l2',
+        color='landcover',
+        color_discrete_sequence=['green', 'blue'],
+        symbol='landcover',
+        facet_col='model',
+        facet_col_spacing=0.04,
+        facet_row='variable',
+        facet_row_spacing=0.04,
+    )
 
 # Figure X
 # inc_data = iclr_data[iclr_data['attribute']=='income']
@@ -127,7 +141,7 @@ if __name__ == '__main__':
             iclr_data = pickle.load(f)
 
     # collate all error data
-    error_data_path = 'outputs/results_iclr_error_landcover.pkl'
+    error_data_path = 'outputs/results_iclr_error.pkl'
     if not os.path.exists(error_data_path):
         print('regathering error data')
         error_data = pd.DataFrame()
@@ -147,3 +161,4 @@ if __name__ == '__main__':
     # analysis pipeline
     fig2(iclr_data.copy())
     fig3(iclr_data.copy())
+    fig4(error_data.copy())
