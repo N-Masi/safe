@@ -30,7 +30,29 @@ python3 -m twine upload dist/*
 
 <!-- When running directly from the source repository, run files with `python -m safe_earth.<directory>.<file_without_extension>` while in the `src/` subdirectory. -->
 
-### Example
+### Basic Usage
+
+There are 3 basic steps to any SAFE pipeline:
+1. Measure **loss**: any function that operates between each predicted $\hat{y}$ and the ground truth $y$. There is a loss calculated for every prediction by a given model at every permutation of gridpoint, timestamp, lead time, variable, and vertical level. 
+
+    Example: the latitude-weighted squared difference of $\hat{y}$ and $y$.
+
+2. Measure **stratified error**: any function that reduces across gridpoints to calculate a metric for each strata. 
+
+    Example: RMSE.
+
+3. Measure **fairness**: any function that operates on a set of stratified errors. Calculates a fairness metric for each permutation of model and attribute (e.g., the fairness of GraphCast in prediction by territory).
+
+    Example: greatest absolute difference in RMSEs.
+
+It is most useful to look at the errors and fairness. Errors allow you to see how well a particular model works in a specific strata, which can be useful to decision makers determining which model is most accurate for their country or region. Fairness metrics provide a summary statistic for the overall amount of bias in a model. 
+
+For now, loss functions should create dataframes with columns for the output of the function. The name of that column is passed into the error function. Calls to `src/safe_earth/metrics/fairness.measure_fairness` take in the fairness functions as objects and run them all internally. The first major version of the package will bring this paradigm to the errors as well by taking in loss functions as parameters.
+
+<!-- TODO: pass error function handles to losses rather than error names -->
+<!-- To facilitate ease of use, you generate errors by passing in the loss functions of choice as arguments to a call from `src/safe_earth/metrics/errors`, and also submit functions as arguments in calls to `src/safe_earth/metrics/fairness.measure_fairness`. This reduces the lines of code in a SAFE pipeline, and also allows you to extend SAFE with your own functions. You can still access the losses themselves through direct calls to `src/safe_earth/metrics/losses`. -->
+
+### Demos
 
 An example of using the package to collect metrics on 6 AIWP models across the territory, subregion, income, and landcover attributes is availabe in `demos/iclr_workflow.py`. It assesses the models using 2020 ERA5 data.
 
@@ -50,4 +72,4 @@ To unify the coordinate system across all integrated data sources, latitude rang
 
 ### Testing
 
-Run `pytest` in the terminal of the repo directory while in python environment that has pytest installed.
+Run `pytest` in the terminal of the repo directory while in a python environment that has pytest installed.
