@@ -18,10 +18,6 @@ lead_times = [np.timedelta64(x, 'h') for x in range(12, 241, 12)]
 variables = [ERA5Var('temperature', 850, 'T850'), ERA5Var('geopotential', 500, 'Z500')]
 era5 = safe_earth.data.climate.era5.get_era5(resolution, variables=variables)
 
-test = ['hello']
-with open(f'outputs/results_test.pkl', 'wb') as f:
-        pickle.dump(test, f)
-
 for model in models:
     print(f'===== ON MODEL: {model} =====', flush=True)
 
@@ -49,13 +45,18 @@ for model in models:
         added_cols={'model': model}
     )
 
+    print('saving stratified errors', flush=True)
+
+    with open(f'outputs/results_{model}_errors.pkl', 'wb') as f:
+        pickle.dump(strata_metrics, f)
+
     print('moving onto fairness', flush=True)
 
-    diffs = fairness.measure_fairness(strata_metrics, funcs=[fairness.greatest_abs_diff, fairness.variance])
+    fairness_metrics = fairness.measure_fairness(strata_metrics, funcs=[fairness.greatest_abs_diff, fairness.variance])
 
     print('saving fairness results', flush=True)
 
-    with open(f'outputs/results_{model}_{resolution}.pkl', 'wb') as f:
-        pickle.dump(diffs, f)
+    with open(f'outputs/results_{model}_iclr.pkl', 'wb') as f:
+        pickle.dump(fairness_metrics, f)
 
 print('completed successfully!', flush=True)
