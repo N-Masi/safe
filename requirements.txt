@@ -5,7 +5,7 @@ pandas
 shapely
 tqdm
 lightning
-scikit-learn
+scikit-learn==1.7.2
 pyyaml
 torchvision
 torchaudio

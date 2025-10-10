@@ -14,7 +14,8 @@ def filter_outliers(df: pd.DataFrame, error_metric: str = 'rmse_weighted_l2') ->
                         (df['lead_time'] == lt)
                     )
                     samples = df.loc[mask, error_metric].tolist()
-                    estimator = LOF()
+                    n_samples = min(20, len(samples)-1) # this is default behavior in sklearn 1.7.2
+                    estimator = LOF(n_samples=n_samples) # manually performing the min prevents a warning from displaying
                     outliers = (estimator.fit_predict(np.array(samples).reshape(-1, 1)) == -1)
                     df.drop(df.loc[mask][outliers].index, inplace=True)
     return df

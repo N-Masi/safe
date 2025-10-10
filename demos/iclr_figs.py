@@ -4,6 +4,7 @@ import pickle
 import numpy as np
 import pandas as pd
 import geopandas as gpd
+import safe_earth.metrics.fairness as fairness
 from safe_earth.utils.stats import filter_outliers
 import pdb
 
@@ -32,6 +33,7 @@ def fig2(df: pd.DataFrame, show: bool = True, save_path: str = 'outputs/viz/iclr
         hovertemplate = t.hovertemplate.replace(t.name, newnames[t.name])
         )
     )
+    fig_gad.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1].capitalize()))
     fig_gad.update_xaxes(tickmode = 'array', tickvals = lead_times, showticklabels = True, tickangle=-90, tickfont_size=8, title_font_size=10)
     fig_gad.update_yaxes(matches=None, showticklabels=True)
     if show:
@@ -155,70 +157,6 @@ def fig5(df: pd.DataFrame, show: bool = True, save_path: str = 'outputs/viz/iclr
         fig.show()
     fig.write_image(save_path, width=1600, height=800, scale=4)
 
-# Figure 6
-def fig6(df: pd.DataFrame, show: bool = True, save_path: str = 'outputs/viz/iclr/rmse_diff_no_outliers.pdf'):
-    '''
-    Plot Figure 6. Greatest Absolute Difference in RMSE fairness metric with outliers filtered out
-    '''
-    fig_gad = px.line(
-        df,
-        x='lead_time',
-        y='gad_rmse_weighted_l2',
-        color='model',
-        symbol='model',
-        symbol_sequence=['circle', 'square', 'diamond', 'cross', 'x', 'triangle-up'],
-        facet_col='attribute',
-        facet_col_spacing=0.04,
-        facet_row='variable',
-        facet_row_spacing=0.04,
-        labels={
-            'lead_time': 'lead time (hours)',
-            'gad_rmse_weighted_l2': 'Greatest Absolute Difference in Per-strata RMSE'
-        }
-    )
-    fig_gad.for_each_trace(lambda t: t.update(name = newnames[t.name],
-        legendgroup = newnames[t.name],
-        hovertemplate = t.hovertemplate.replace(t.name, newnames[t.name])
-        )
-    )
-    fig_gad.update_xaxes(tickmode = 'array', tickvals = lead_times, showticklabels = True, tickangle=-90, tickfont_size=8, title_font_size=10)
-    fig_gad.update_yaxes(matches=None, showticklabels=True)
-    if show:
-        fig_gad.show()
-    fig_gad.write_image(save_path, width=1200, height=800, scale=4)
-
-def fig3(df: pd.DataFrame, show: bool = True, save_path: str = 'outputs/viz/iclr/rmse_var.pdf'):
-    '''
-    Plot Figure 3. Variance of RMSE fairness metric.
-    '''
-    fig_var = px.line(
-        df,
-        x='lead_time',
-        y='variance_rmse_weighted_l2',
-        color='model',
-        symbol='model',
-        symbol_sequence=['circle', 'square', 'diamond', 'cross', 'x', 'triangle-up'],
-        facet_col='attribute',
-        facet_col_spacing=0.04,
-        facet_row='variable',
-        facet_row_spacing=0.04,
-        labels={
-            'lead_time': 'lead time (hours)',
-            'variance_rmse_weighted_l2': 'Variance in per-strata RMSE'
-        }
-    )
-    fig_var.for_each_trace(lambda t: t.update(name = newnames[t.name],
-        legendgroup = newnames[t.name],
-        hovertemplate = t.hovertemplate.replace(t.name, newnames[t.name])
-        )
-    )
-    fig_var.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1].capitalize()))
-    fig_var.update_xaxes(tickmode = 'array', tickvals = lead_times, showticklabels = True, tickangle=-90, tickfont_size=8, title_font_size=10)
-    fig_var.update_yaxes(matches=None, showticklabels=True)
-    if show:
-        fig_var.show()
-    fig_var.write_image(save_path, width=1200, height=800, scale=4)
-
 # Figure 8
 def fig8(df: pd.DataFrame, show: bool = True, save_path: str = 'outputs/viz/iclr/zoomed_income_strata_plots.pdf'):
     '''
@@ -262,34 +200,6 @@ def fig8(df: pd.DataFrame, show: bool = True, save_path: str = 'outputs/viz/iclr
     if show:
         fig.show()
     fig.write_image(save_path, width=1600, height=800, scale=4)
-
-# Figure X
-# inc_data = iclr_data[iclr_data['attribute']=='income']
-# fig_inc = px.line(
-#     inc_data,
-#     x='lead_time',
-#     y='gad_rmse_weighted_l2',
-#     color='income',
-#     symbol='income',
-#     facet_col='model',
-#     facet_col_spacing=0.04,
-#     facet_row='variable',
-#     facet_row_spacing=0.04,
-#     labels={
-#         'lead_time': 'lead time (hours)'
-#     },
-#     category_orders={
-#         'income': ['High-income Countries', 'Upper-middle-income Countries', 'Lower-middle-income Countries', 'Low-income Countries', 'Baseline (all gridpoints)']
-#     }
-# )
-# fig_inc.for_each_trace(lambda t: t.update(name = newnames[t.name],
-#     legendgroup = newnames[t.name],
-#     hovertemplate = t.hovertemplate.replace(t.name, newnames[t.name])
-#     )
-# )
-# fig_inc.update_xaxes(tickmode = 'array', tickvals = lead_times, showticklabels = True, tickangle=-90, tickfont_size=8, title_font_size=10)
-# fig_inc.show()
-# fig_inc.write_image('outputs/viz/iclr/rmse_diff_income.pdf', width=1200, height=800, scale=4)
 
 if __name__ == '__main__':
     # define constants
@@ -345,10 +255,10 @@ if __name__ == '__main__':
     no_outliers = pd.concat([fairness_metrics['territory'], fairness_metrics['subregion'], fairness_metrics['income']])
 
     # analysis pipeline
-    # fig2(iclr_data.copy())
-    # fig3(iclr_data.copy())
-    # fig4(error_data.copy())
-    # fig5(error_data.copy())
-    fig6(no_outliers.copy())
-    # fig7(error_data.copy())
-    # fig8(error_data.copy())
+    fig2(iclr_data.copy())
+    fig3(iclr_data.copy())
+    fig4(error_data.copy())
+    fig5(error_data.copy())
+    fig2(no_outliers.copy(), save_path='outputs/viz/iclr/rmse_diff_no_outliers.pdf') # for fig 6, recreate fig 2 without outliers
+    fig3(no_outliers.copy(), save_path='outputs/viz/iclr/rmse_var_no_outliers.pdf') # for fig 7, recreate fig 3 without outliers
+    fig8(error_data.copy())
