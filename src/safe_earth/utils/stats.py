@@ -1,5 +1,6 @@
 from sklearn.neighbors import LocalOutlierFactor as LOF
 import numpy as np
+import pandas as pd
 
 def filter_outliers(df: pd.DataFrame) -> pd.DataFrame:
     for variable in df.variable.unique():
