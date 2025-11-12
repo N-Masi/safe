@@ -157,10 +157,67 @@ def fig5(df: pd.DataFrame, show: bool = True, save_path: str = 'outputs/viz/iclr
         fig.show()
     fig.write_image(save_path, width=1600, height=800, scale=4)
 
-# Figure 8
-def fig8(df: pd.DataFrame, show: bool = True, save_path: str = 'outputs/viz/iclr/zoomed_income_strata_plots.pdf'):
+def fig8(errors: pd.DataFrame, no_outliers: pd.DataFrame(), show: bool = True, save_path: str = 'outputs/viz/iclr/rmse_as_percent'):
     '''
-    Plot Figure 8. Zoomed in analysis of the income attribute for the first 48 hours of lead time.
+    Figures that show the greatest RMSE as a percentage of the lowest RMSE, as a measure of the spread,
+    with and without outliers. This shows bias is not driven by outliers alone.
+    '''
+
+    # TODO: this can be achieved easier with fairness.ratio, but was written before that function
+    entries = []
+    variables = ['T850', 'Z500']
+    for variable in variables:
+        no_outliers_var = no_outliers[no_outliers['variable']==variable]
+        for model in errors.model.unique():
+            for lt in errors.lead_time.unique():
+                for attribute in ['territory', 'subregion', 'income']:
+                    errors_mask = (
+                        (errors['variable']==variable) &
+                        (errors['model']==model) &
+                        (errors['lead_time']==lt) &
+                        (errors['attribute']==attribute)
+                    )
+                    vals = errors.loc[errors_mask, 'rmse_weighted_l2'].tolist()
+                    tmax = np.max(vals)
+                    tmin = np.min(vals)
+                    entries += [{'variable': variable, 'model': model, 'lead_time': lt, 'attribute': attribute, 'rmse_%_diff': tmax/tmin, 'outliers': 'yes'}]
+                    outliers_mask = (
+                        (no_outliers['variable']==variable) &
+                        (no_outliers['model']==model) &
+                        (no_outliers['lead_time']==lt) &
+                        (no_outliers['attribute']==attribute)
+                    )
+                    vals = no_outliers.loc[outliers_mask, 'rmse_weighted_l2'].tolist()
+                    tmax = np.max(vals)
+                    tmin = np.min(vals)
+                    entries += [{'variable': variable, 'model': model, 'lead_time': lt, 'attribute': attribute, 'rmse_%_diff': tmax/tmin, 'outliers': 'no'}]
+    df = pd.DataFrame(entries)
+    
+    for variable in ['T850', 'Z500']:
+        fig = px.line(
+            df[df['variable']==variable],
+            x='lead_time',
+            y='rmse_%_diff',
+            color='outliers',
+            line_dash='outliers',
+            facet_col='attribute',
+            facet_col_spacing=0.02,
+            facet_row='model',
+            labels={
+                'lead_time': 'lead time (hours)',
+                'rmse_%_diff': f'Highest RMSE as % of Lowest RMSE ({variable})'
+            }
+        )
+        fig.for_each_annotation(lambda a: a.update(text=newnames[a.text.split("=")[-1]] if a.text.split("=")[-1] in newnames else '('+a.text.split("=")[-1].capitalize()+')'))
+        if show:
+            fig.show()
+        fig.write_image(f'{save_path}_{variable}.pdf', width=1600, height=800, scale=4)
+
+
+# Figure 9
+def fig9(df: pd.DataFrame, show: bool = True, save_path: str = 'outputs/viz/iclr/zoomed_income_strata_plots.pdf'):
+    '''
+    Plot Figure 9. Zoomed in analysis of the income attribute for the first 48 hours of lead time.
     '''
     # TODO: should this plot include baseline?
     df = df[df['attribute']=='income']
@@ -252,13 +309,14 @@ if __name__ == '__main__':
     fairness_metrics['territory']['attribute'] = 'territory'
     fairness_metrics['subregion']['attribute'] = 'subregion'
     fairness_metrics['income']['attribute'] = 'income'
-    no_outliers = pd.concat([fairness_metrics['territory'], fairness_metrics['subregion'], fairness_metrics['income']])
+    no_outliers_metrics = pd.concat([fairness_metrics['territory'], fairness_metrics['subregion'], fairness_metrics['income']])
 
     # analysis pipeline
-    fig2(iclr_data.copy())
-    fig3(iclr_data.copy())
-    fig4(error_data.copy())
-    fig5(error_data.copy())
-    fig2(no_outliers.copy(), save_path='outputs/viz/iclr/rmse_diff_no_outliers.pdf') # for fig 6, recreate fig 2 without outliers
-    fig3(no_outliers.copy(), save_path='outputs/viz/iclr/rmse_var_no_outliers.pdf') # for fig 7, recreate fig 3 without outliers
-    fig8(error_data.copy())
+    # fig2(iclr_data.copy())
+    # fig3(iclr_data.copy())
+    # fig4(error_data.copy())
+    # fig5(error_data.copy())
+    # fig2(no_outliers_metrics.copy(), save_path='outputs/viz/iclr/rmse_diff_no_outliers.pdf') # for fig 6, recreate fig 2 without outliers
+    # fig3(no_outliers_metrics.copy(), save_path='outputs/viz/iclr/rmse_var_no_outliers.pdf') # for fig 7, recreate fig 3 without outliers
+    fig8(error_data.copy(), no_outliers.copy())
+    # fig9(error_data.copy())

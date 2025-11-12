@@ -1,7 +1,7 @@
 # SAFE
 Stratified Assessment of Forecasts over Earth
 
-[Preprint](https://n-masi.github.io/papers/safe_masi.pdf) and [Website](https://n-masi.github.io/safe)
+[Preprint](https://arxiv.org/abs/2510.26099) and [Website](https://n-masi.github.io/safe)
 
 ### Installation
 
@@ -33,6 +33,7 @@ python3 -m twine upload dist/*
 ### Basic Usage
 
 There are 3 basic steps to any SAFE pipeline:
+
 1. Measure **loss**: any function that operates between each predicted $\hat{y}$ and the ground truth $y$. There is a loss calculated for every prediction by a given model at every permutation of gridpoint, timestamp, lead time, variable, and vertical level. 
 
     Example: the latitude-weighted squared difference of $\hat{y}$ and $y$.

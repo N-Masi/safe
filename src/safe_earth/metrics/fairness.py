@@ -54,16 +54,28 @@ def greatest_abs_diff(
     ) -> dict:
     varmax = np.max(df[metric])
     varmin = np.min(df[metric])    
-    return {f'gad_{metric}': varmax-varmin}
+    val = varmax-varmin
+    return {f'gad_{metric}': val}
 
 def variance(
         df: pd.DataFrame,
         metric: str
     ) -> dict:
-    return {f'variance_{metric}': np.var(df[metric])}
+    val = np.var(df[metric])
+    return {f'variance_{metric}': val}
 
 def standard_deviation(
         df: pd.DataFrame,
         metric: str
     ) -> dict:
-    return {f'std_{metric}': np.std(df[metric])}
+    val = np.std(df[metric])
+    return {f'std_{metric}': val}
+
+def ratio(
+        df: pd.DataFrame,
+        metric: str
+    ) -> dict:
+    varmax = np.max(df[metric])
+    varmin = np.min(df[metric])
+    val = varmax/varmin
+    return {f'ratio_{metric}': val}
