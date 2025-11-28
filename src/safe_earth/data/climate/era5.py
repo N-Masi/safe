@@ -21,7 +21,9 @@ class ERA5Var:
         Parameters:
             variable_name_in_xarray: string name of the data variable in ERA5 xarray.Dataset
             vertical_level: value of the `level` index in the ERA5 xarray.Dataset
-            name: optional shorthand name to call the variable
+            name: optional shorthand name to call the variable; when the same climactic variable
+                    is called different things in different sources (e.g., model vs ground truth),
+                    you can set this name variable equal for both to resolve the issue
         '''
         self.variable = variable_name_in_xarray
         self.level = vertical_level
