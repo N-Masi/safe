@@ -17,3 +17,4 @@ module --ignore_cache load "conda"
 conda init bash
 conda activate faireenvconda
 python demos/iclr_workflow.py
+python demos/iclr_workflow_additional_vars.py

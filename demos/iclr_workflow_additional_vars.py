@@ -1,0 +1,107 @@
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+import safe_earth
+from safe_earth.data.climate.era5 import ERA5Var
+import safe_earth.metrics.fairness as fairness
+import pandas as pd
+import numpy as np
+import pickle
+import time
+import pdb
+import platform
+
+resolution = '240x121'
+lead_times = [np.timedelta64(x, 'h') for x in range(12, 241, 12)]
+
+variables_precip = [ERA5Var('total_precipitation_6hr', name='P6'), ERA5Var('total_precipitation_24hr', name='P24')]
+models_precip = ['graphcast', 'fuxi']
+variables_other = [ERA5Var('2m_temperature', name='T2M'), ERA5Var('10m_u_component_of_wind', name='U1OM'), ERA5Var('10m_v_component_of_wind', name='V1OM')]
+models_other = ['graphcast', 'pangu', 'fuxi']
+
+for model in models_precip:
+    print(f'===== ON PRECIP MODEL: {model} =====', flush=True)
+
+    print('about to load data', flush=True)
+
+    preds = safe_earth.data.climate.wb2.get_wb2_preds(model, resolution, lead_times, variables=variables_precip)
+
+    print('about to run losses', flush=True)
+
+    loss_gdf = safe_earth.metrics.losses.climate_weighted_l2(
+        data=preds, 
+        ground_truth=era5, 
+        lon_dim='longitude', 
+        lat_dim='latitude',
+        lead_time_dim='prediction_timedelta'
+    )
+
+    print('about to run errors', flush=True)
+
+    attributes = 'all'
+    strata_metrics = safe_earth.metrics.errors.stratified_rmse(
+        loss_gdf,
+        loss_metrics=['weighted_l2'],
+        attributes=attributes,
+        added_cols={'model': model}
+    )
+
+    print('saving stratified errors', flush=True)
+
+    with open(f'outputs/additional_vars/{model}_precip_errors.pkl', 'wb') as f:
+        pickle.dump(strata_metrics, f)
+
+    print('moving onto fairness', flush=True)
+
+    fairness_metrics = fairness.measure_fairness(strata_metrics, funcs=[fairness.greatest_abs_diff, fairness.variance])
+
+    print('saving fairness results', flush=True)
+
+    with open(f'outputs/additional_vars/{model}_precip_fairness.pkl', 'wb') as f:
+        pickle.dump(fairness_metrics, f)
+
+print('precipitation completed successfully!', flush=True)
+
+for model in models_other:
+    print(f'===== ON TEMP/WIND VAR MODEL: {model} =====', flush=True)
+
+    print('about to load data', flush=True)
+
+    preds = safe_earth.data.climate.wb2.get_wb2_preds(model, resolution, lead_times, variables=variables_other)
+
+    print('about to run losses', flush=True)
+
+    loss_gdf = safe_earth.metrics.losses.climate_weighted_l2(
+        data=preds, 
+        ground_truth=era5, 
+        lon_dim='longitude', 
+        lat_dim='latitude',
+        lead_time_dim='prediction_timedelta'
+    )
+
+    print('about to run errors', flush=True)
+
+    attributes = 'all'
+    strata_metrics = safe_earth.metrics.errors.stratified_rmse(
+        loss_gdf,
+        loss_metrics=['weighted_l2'],
+        attributes=attributes,
+        added_cols={'model': model}
+    )
+
+    print('saving stratified errors', flush=True)
+
+    with open(f'outputs/additional_vars/{model}_t2m_wind_errors.pkl', 'wb') as f:
+        pickle.dump(strata_metrics, f)
+
+    print('moving onto fairness', flush=True)
+
+    fairness_metrics = fairness.measure_fairness(strata_metrics, funcs=[fairness.greatest_abs_diff, fairness.variance])
+
+    print('saving fairness results', flush=True)
+
+    with open(f'outputs/additional_vars/{model}_t2m_wind_fairness.pkl', 'wb') as f:
+        pickle.dump(fairness_metrics, f)
+
+print('temp/wind completed successfully!', flush=True)
