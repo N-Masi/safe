@@ -15,6 +15,14 @@ from safe_earth.data.climate import wb2_stores
 
 class ERA5Var:
     def __init__(self, variable_name_in_xarray: str, vertical_level: int = None, name: str = None):
+        '''
+        Wrapper class for variables to extract from the WeatherBench2 mirror of ERA5 ground
+        truth data: https://weatherbench2.readthedocs.io/en/latest/data-guide.html
+        Parameters:
+            variable_name_in_xarray: string name of the data variable in ERA5 xarray.Dataset
+            vertical_level: value of the `level` index in the ERA5 xarray.Dataset
+            name: optional shorthand name to call the variable
+        '''
         self.variable = variable_name_in_xarray
         self.level = vertical_level
         if name:
@@ -22,7 +30,7 @@ class ERA5Var:
         elif vertical_level:
             self.name = f'{variable_name_in_xarray}_{vertical_level}'
         else:
-            self.name = variable_name_in_xarrays
+            self.name = variable_name_in_xarray
 
 # TODO: support more resolutions
 def get_era5(
