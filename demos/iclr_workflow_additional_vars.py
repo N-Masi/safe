@@ -23,6 +23,12 @@ models_other = ['graphcast', 'pangu', 'fuxi']
 
 era5 = safe_earth.data.climate.era5.get_era5(resolution, variables=variables_precip+variables_other)
 
+# convert precip unit from m to mm
+era5['P6'].values = era5['P6'].values * 1000
+era5['P6'].attrs['units'] = 'mm'
+era5['P24'].values = era5['P24'].values * 1000
+era5['P24'].attrs['units'] = 'mm'
+
 for model in models_precip:
     print(f'===== ON PRECIP MODEL: {model} =====', flush=True)
 
@@ -32,6 +38,10 @@ for model in models_precip:
         preds = safe_earth.data.climate.wb2.get_wb2_preds(model, resolution, lead_times, variables=variables_precip_fuxi)
     else:
         preds = safe_earth.data.climate.wb2.get_wb2_preds(model, resolution, lead_times, variables=variables_precip)
+
+        # graphcast preds also need to be converted m -> mm
+        preds['P6'] = preds['P6'] * 1000
+        preds['P24'] = preds['P24'] * 1000
 
     print('about to run losses', flush=True)
 
