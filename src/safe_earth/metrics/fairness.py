@@ -87,4 +87,4 @@ def normalized_diff(
     varmax = np.max(df[metric])
     varmin = np.min(df[metric])    
     val = (varmax-varmin)/varmax
-    return {f'gad_{metric}': val}
+    return {f'normed_diff_{metric}': val}
