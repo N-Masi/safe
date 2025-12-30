@@ -8,7 +8,14 @@ import safe_earth.metrics.fairness as fairness
 from safe_earth.utils.stats import filter_outliers
 import pdb
 
-def fig2(df: pd.DataFrame, show: bool = True, save_path: str = 'outputs/viz/iclr/rmse_diff.pdf'):
+def fig2(
+        df: pd.DataFrame, 
+        show: bool = True, 
+        save_path: str = 'outputs/viz/iclr/rmse_diff.pdf',
+        newnames = {'graphcast':'GraphCast', 'keisler': 'Keisler (2022)', 'pangu': 'Pangu-Weather', 'sphericalcnn': 'Spherical CNN', 'fuxi': 'FuXi', 'neuralgcm': 'NeuralGCM'},
+        lead_times = [x for x in range(12, 241, 12)],
+        attributes = ['territory', 'subregion', 'income', 'landcover']
+    ):
     '''
     Plot Figure 2. Greatest Absolute Difference in RMSE fairness metric.
     '''
@@ -40,7 +47,14 @@ def fig2(df: pd.DataFrame, show: bool = True, save_path: str = 'outputs/viz/iclr
         fig_gad.show()
     fig_gad.write_image(save_path, width=1200, height=800, scale=4)
 
-def fig3(df: pd.DataFrame, show: bool = True, save_path: str = 'outputs/viz/iclr/rmse_var.pdf'):
+def fig3(
+        df: pd.DataFrame, 
+        show: bool = True, 
+        save_path: str = 'outputs/viz/iclr/rmse_var.pdf',
+        newnames = {'graphcast':'GraphCast', 'keisler': 'Keisler (2022)', 'pangu': 'Pangu-Weather', 'sphericalcnn': 'Spherical CNN', 'fuxi': 'FuXi', 'neuralgcm': 'NeuralGCM'},
+        lead_times = [x for x in range(12, 241, 12)],
+        attributes = ['territory', 'subregion', 'income', 'landcover']
+    ):
     '''
     Plot Figure 3. Variance of RMSE fairness metric.
     '''
@@ -72,7 +86,14 @@ def fig3(df: pd.DataFrame, show: bool = True, save_path: str = 'outputs/viz/iclr
         fig_var.show()
     fig_var.write_image(save_path, width=1200, height=800, scale=4)
 
-def fig4(df: pd.DataFrame, show: bool = True, save_path: str = 'outputs/viz/iclr/income_strata_plots.pdf'):
+def fig4(
+        df: pd.DataFrame, 
+        show: bool = True, 
+        save_path: str = 'outputs/viz/iclr/income_strata_plots.pdf',
+        newnames = {'graphcast':'GraphCast', 'keisler': 'Keisler (2022)', 'pangu': 'Pangu-Weather', 'sphericalcnn': 'Spherical CNN', 'fuxi': 'FuXi', 'neuralgcm': 'NeuralGCM'},
+        lead_times = [x for x in range(12, 241, 12)],
+        attributes = ['territory', 'subregion', 'income', 'landcover']
+    ):
     '''
     Plot Figure 4. Analysis of the income attribute.
     '''
@@ -116,7 +137,14 @@ def fig4(df: pd.DataFrame, show: bool = True, save_path: str = 'outputs/viz/iclr
     fig.write_image(save_path, width=1600, height=800, scale=4)
 
 # Figure 5
-def fig5(df: pd.DataFrame, show: bool = True, save_path: str = 'outputs/viz/iclr/landcover_strata_plots.pdf'):
+def fig5(
+        df: pd.DataFrame, 
+        show: bool = True, 
+        save_path: str = 'outputs/viz/iclr/landcover_strata_plots.pdf',
+        newnames = {'graphcast':'GraphCast', 'keisler': 'Keisler (2022)', 'pangu': 'Pangu-Weather', 'sphericalcnn': 'Spherical CNN', 'fuxi': 'FuXi', 'neuralgcm': 'NeuralGCM'},
+        lead_times = [x for x in range(12, 241, 12)],
+        attributes = ['territory', 'subregion', 'income', 'landcover']
+    ):
     '''
     Plot Figure 5. Analysis of the landcover attribute.
     '''
@@ -157,7 +185,14 @@ def fig5(df: pd.DataFrame, show: bool = True, save_path: str = 'outputs/viz/iclr
         fig.show()
     fig.write_image(save_path, width=1600, height=800, scale=4)
 
-def fig8(errors: pd.DataFrame, no_outliers: pd.DataFrame(), show: bool = True, save_path: str = 'outputs/viz/iclr/rmse_as_percent'):
+def fig8(
+        errors: pd.DataFrame, 
+        no_outliers: pd.DataFrame(), 
+        show: bool = True, save_path: str = 'outputs/viz/iclr/rmse_as_percent',
+        newnames = {'graphcast':'GraphCast', 'keisler': 'Keisler (2022)', 'pangu': 'Pangu-Weather', 'sphericalcnn': 'Spherical CNN', 'fuxi': 'FuXi', 'neuralgcm': 'NeuralGCM'},
+        lead_times = [x for x in range(12, 241, 12)],
+        attributes = ['territory', 'subregion', 'income', 'landcover']
+    ):
     '''
     Figures that show the greatest RMSE as a percentage of the lowest RMSE, as a measure of the spread,
     with and without outliers. This shows bias is not driven by outliers alone.
@@ -214,10 +249,17 @@ def fig8(errors: pd.DataFrame, no_outliers: pd.DataFrame(), show: bool = True, s
         fig.write_image(f'{save_path}_{variable}.pdf', width=1600, height=800, scale=4)
 
 
-# Figure 9
-def fig9(df: pd.DataFrame, show: bool = True, save_path: str = 'outputs/viz/iclr/zoomed_income_strata_plots.pdf'):
+def app_f(
+        df: pd.DataFrame, 
+        show: bool = True, 
+        save_path: str = 'outputs/viz/iclr/zoomed_income_strata_plots.pdf',
+        newnames = {'graphcast':'GraphCast', 'keisler': 'Keisler (2022)', 'pangu': 'Pangu-Weather', 'sphericalcnn': 'Spherical CNN', 'fuxi': 'FuXi', 'neuralgcm': 'NeuralGCM'},
+        lead_times = [x for x in range(12, 241, 12)],
+        attributes = ['territory', 'subregion', 'income', 'landcover']
+    ):
     '''
-    Plot Figure 9. Zoomed in analysis of the income attribute for the first 48 hours of lead time.
+    Plot Figure in Supplemental Appendix F. 
+    Zoomed in analysis of the income attribute for the first 48 hours of lead time.
     '''
     # TODO: should this plot include baseline?
     df = df[df['attribute']=='income']
@@ -258,11 +300,9 @@ def fig9(df: pd.DataFrame, show: bool = True, save_path: str = 'outputs/viz/iclr
         fig.show()
     fig.write_image(save_path, width=1600, height=800, scale=4)
 
-if __name__ == '__main__':
+def base_paper_variables():
     # define constants
     models = ['graphcast', 'keisler', 'pangu', 'sphericalcnn', 'fuxi', 'neuralgcm']
-    newnames = {'graphcast':'GraphCast', 'keisler': 'Keisler (2022)', 'pangu': 'Pangu-Weather', 'sphericalcnn': 'Spherical CNN', 'fuxi': 'FuXi', 'neuralgcm': 'NeuralGCM'}
-    lead_times = [x for x in range(12, 241, 12)]
     attributes = ['territory', 'subregion', 'income', 'landcover']
 
     # collate all model data into a unified dataframe
@@ -312,11 +352,105 @@ if __name__ == '__main__':
     no_outliers_metrics = pd.concat([fairness_metrics['territory'], fairness_metrics['subregion'], fairness_metrics['income']])
 
     # analysis pipeline
-    # fig2(iclr_data.copy())
-    # fig3(iclr_data.copy())
-    # fig4(error_data.copy())
-    # fig5(error_data.copy())
-    # fig2(no_outliers_metrics.copy(), save_path='outputs/viz/iclr/rmse_diff_no_outliers.pdf') # for fig 6, recreate fig 2 without outliers
-    # fig3(no_outliers_metrics.copy(), save_path='outputs/viz/iclr/rmse_var_no_outliers.pdf') # for fig 7, recreate fig 3 without outliers
+    fig2(iclr_data.copy())
+    fig3(iclr_data.copy())
+    fig4(error_data.copy())
+    fig5(error_data.copy())
+    fig2(no_outliers_metrics.copy(), save_path='outputs/viz/iclr/rmse_diff_no_outliers.pdf') # for fig 6, recreate fig 2 without outliers
+    fig3(no_outliers_metrics.copy(), save_path='outputs/viz/iclr/rmse_var_no_outliers.pdf') # for fig 7, recreate fig 3 without outliers
     fig8(error_data.copy(), no_outliers.copy())
-    # fig9(error_data.copy())
+    app_f(error_data.copy())
+
+def precip_graphs():
+    # define constants
+    models = ['graphcast', 'fuxi']
+    newnames = {'graphcast':'GraphCast', 'fuxi': 'FuXi'}
+    attributes = ['territory', 'subregion', 'income', 'landcover']
+
+    # collate fairness metrics of the diff models into one df
+    data_path = 'outputs/additional_vars/precip_fairness.pkl'
+    if not os.path.exists(data_path):
+        fairness_data = pd.DataFrame()
+        for attr in attributes:
+            for model in models:
+                with open(f'outputs/additional_vars/{model}_precip_fairness.pkl', 'rb') as f:
+                    model_dict = pickle.load(f)
+                model_df = model_dict[attr]
+                model_df['attribute'] = attr
+                fairness_data = pd.concat([fairness_data, model_df], ignore_index=True)
+        with open(data_path, 'wb') as f:
+            pickle.dump(fairness_data, f)
+    else:
+        with open(data_path, 'rb') as f:
+            fairness_data = pickle.load(f)
+
+    # collate all error data
+    error_data_path = 'outputs/additional_vars/precip_errors.pkl'
+    if not os.path.exists(error_data_path):
+        error_data = pd.DataFrame()
+        for attr in attributes:
+            for model in models:
+                with open(f'outputs/additional_vars/{model}_precip_errors.pkl', 'rb') as f:
+                    model_dict = pickle.load(f)
+                model_df = model_dict[attr]
+                model_df['attribute'] = attr
+                error_data = pd.concat([error_data, model_df], ignore_index=True)
+        with open(error_data_path, 'wb') as f:
+            pickle.dump(error_data, f)
+    else:
+        with open(error_data_path, 'rb') as f:
+            error_data = pickle.load(f)
+
+    fig2(fairness_data.copy(), save_path='outputs/viz/iclr/additional_vars/rmse_diff_precip.pdf', newnames=newnames)
+    fig3(fairness_data.copy(), save_path='outputs/viz/iclr/additional_vars/rmse_var_precip.pdf', newnames=newnames)
+
+def non_precip_additional_vars_graphs():
+    # define constants
+    models = ['graphcast', 'pangu', 'fuxi']
+    newnames = {'graphcast':'GraphCast', 'pangu': 'Pangu-Weather', 'fuxi': 'FuXi'}
+    attributes = ['territory', 'subregion', 'income', 'landcover']
+
+    # collate fairness metrics of the diff models into one df
+    data_path = 'outputs/additional_vars/other_fairness.pkl'
+    if not os.path.exists(data_path):
+        fairness_data = pd.DataFrame()
+        for attr in attributes:
+            for model in models:
+                with open(f'outputs/additional_vars/{model}_t2m_wind_fairness.pkl', 'rb') as f:
+                    model_dict = pickle.load(f)
+                model_df = model_dict[attr]
+                model_df['attribute'] = attr
+                fairness_data = pd.concat([fairness_data, model_df], ignore_index=True)
+        with open(data_path, 'wb') as f:
+            pickle.dump(fairness_data, f)
+    else:
+        with open(data_path, 'rb') as f:
+            fairness_data = pickle.load(f)
+
+    # collate all error data
+    error_data_path = 'outputs/additional_vars/other_errors.pkl'
+    if not os.path.exists(error_data_path):
+        error_data = pd.DataFrame()
+        for attr in attributes:
+            for model in models:
+                with open(f'outputs/additional_vars/{model}_t2m_wind_errors.pkl', 'rb') as f:
+                    model_dict = pickle.load(f)
+                model_df = model_dict[attr]
+                model_df['attribute'] = attr
+                error_data = pd.concat([error_data, model_df], ignore_index=True)
+        with open(error_data_path, 'wb') as f:
+            pickle.dump(error_data, f)
+    else:
+        with open(error_data_path, 'rb') as f:
+            error_data = pickle.load(f)
+
+    fig2(fairness_data.copy(), save_path='outputs/viz/iclr/additional_vars/rmse_diff_other.pdf', newnames=newnames)
+    fig3(fairness_data.copy(), save_path='outputs/viz/iclr/additional_vars/rmse_var_other.pdf', newnames=newnames)
+
+def additional_variables():
+    # precip_graphs()
+    non_precip_additional_vars_graphs()
+
+if __name__ == '__main__':
+    # base_paper_variables()
+    additional_variables()

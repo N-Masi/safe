@@ -79,3 +79,12 @@ def ratio(
     varmin = np.min(df[metric])
     val = varmax/varmin
     return {f'ratio_{metric}': val}
+
+def normalized_diff(
+    df: pd.DataFrame,
+        metric: str
+    ) -> dict:
+    varmax = np.max(df[metric])
+    varmin = np.min(df[metric])    
+    val = (varmax-varmin)/varmax
+    return {f'normed_diff_{metric}': val}

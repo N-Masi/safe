@@ -21,7 +21,7 @@ era5 = safe_earth.data.climate.era5.get_era5(resolution, variables=variables)
 for model in models:
     print(f'===== ON MODEL: {model} =====', flush=True)
 
-    print('about to load data', flush=True)
+    print('about to load model pred data', flush=True)
 
     preds = safe_earth.data.climate.wb2.get_wb2_preds(model, resolution, lead_times, variables=variables)
 
