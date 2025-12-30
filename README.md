@@ -1,11 +1,14 @@
-# SAFE: Stratified Assessment of Forecasts over Earth
+# SAFE: Stratified Assessments of Forecasts over Earth
 
-![PyPI - Version](https://img.shields.io/pypi/v/safe-earth)
-![Static Badge](https://img.shields.io/badge/pytest-passing-brightgreen)
 [![arXiv](https://img.shields.io/badge/arXiv-2510.26099-b31b1b.svg)](https://arxiv.org/abs/2510.26099)
-[![GitHub](https://img.shields.io/github/license/n-masi/safe)](https://github.com/n-masi/safe/blob/master/LICENSE.txt)
+[![PyPI - Version](https://img.shields.io/pypi/v/safe-earth)](https://pypi.org/project/safe-earth/)
+[![GitHub](https://img.shields.io/github/license/n-masi/safe)](https://github.com/n-masi/safe/blob/master/LICENSE)
+![Static Badge](https://img.shields.io/badge/pytest-passing-brightgreen)
+[![Website](https://img.shields.io/website?url=https://n-masi.github.io/safe&up_color=blue)](https://n-masi.github.io/safe)
 
+<!-- 
 [Preprint](https://arxiv.org/abs/2510.26099) and [Website](https://n-masi.github.io/safe)
+-->
 
 ## Installation
 
@@ -59,7 +62,9 @@ For now, loss functions should create dataframes with columns for the output of 
 
 ## Demos
 
-An example of using SAFE to collect metrics on 6 AIWP models across the territory, subregion, income, and landcover attributes is availabe in `demos/iclr_workflow.py`. It generates error and fairness data by assessing the models on 2020 ERA5 data. To see the type of analysis that can be performed with this data, you can reproduce the figures and tables from the paper by running `demos/iclr_figs.py` and `demos/iclr_tables.py`, respectively.
+An example of using SAFE to collect metrics on 6 AIWP models across the territory, subregion, income, and landcover attributes is availabe in `demos/iclr_workflow.py`. It generates error and fairness data by assessing the models on 2020 ERA5 data. 
+
+To see the type of analysis that can be performed with this data, you can reproduce the figures and tables from the paper by running `demos/iclr_figs.py` and `demos/iclr_tables.py`, respectively.
 
 An interactive notebook utilizing SAFE to investigate territorial disparities is available in `demos/interactive_demo.ipynb`.
 
