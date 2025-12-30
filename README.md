@@ -1,9 +1,13 @@
-# SAFE
-Stratified Assessment of Forecasts over Earth
+# SAFE: Stratified Assessment of Forecasts over Earth
+
+![PyPI - Version](https://img.shields.io/pypi/v/safe-earth)
+![Static Badge](https://img.shields.io/badge/pytest-passing-brightgreen)
+[![arXiv](https://img.shields.io/badge/arXiv-2510.26099-b31b1b.svg)](https://arxiv.org/abs/2510.26099)
+[![GitHub](https://img.shields.io/github/license/n-masi/safe)](https://github.com/n-masi/safe/blob/master/LICENSE.txt)
 
 [Preprint](https://arxiv.org/abs/2510.26099) and [Website](https://n-masi.github.io/safe)
 
-### Installation
+## Installation
 
 `pip install safe-earth`
 
@@ -30,7 +34,7 @@ python3 -m twine upload dist/*
 
 <!-- When running directly from the source repository, run files with `python -m safe_earth.<directory>.<file_without_extension>` while in the `src/` subdirectory. -->
 
-### Basic Usage
+## Basic Usage
 
 There are 3 basic steps to any SAFE pipeline:
 
@@ -53,7 +57,7 @@ For now, loss functions should create dataframes with columns for the output of 
 <!-- TODO: pass error function handles to losses rather than error names -->
 <!-- To facilitate ease of use, you generate errors by passing in the loss functions of choice as arguments to a call from `src/safe_earth/metrics/errors`, and also submit functions as arguments in calls to `src/safe_earth/metrics/fairness.measure_fairness`. This reduces the lines of code in a SAFE pipeline, and also allows you to extend SAFE with your own functions. You can still access the losses themselves through direct calls to `src/safe_earth/metrics/losses`. -->
 
-### Demos
+## Demos
 
 An example of using SAFE to collect metrics on 6 AIWP models across the territory, subregion, income, and landcover attributes is availabe in `demos/iclr_workflow.py`. It generates error and fairness data by assessing the models on 2020 ERA5 data. To see the type of analysis that can be performed with this data, you can reproduce the figures and tables from the paper by running `demos/iclr_figs.py` and `demos/iclr_tables.py`, respectively.
 
@@ -69,10 +73,23 @@ An interactive notebook utilizing SAFE to investigate territorial disparities is
 
 -->
 
-### Data Notes
+## Data Notes
 
 To unify the coordinate system across all integrated data sources, latitude ranges [-90, 90] with index 0 at -90, and longitude [-180, 180) but with index 0 at 0 and a wraparound from 180 to -180 in the middle. This is because metadata sourced from pygeoboundaries_geolab follows this coordinate system, and it is easiest to bring tabular data into conformance.
 
-### Testing
+## Testing
 
 Run `pytest` in the terminal of the repo directory while in a python environment that has pytest installed.
+
+## Citation
+
+If you use SAFE in your work, please cite us!
+
+```
+@article{masi2025safe,
+  title={SAFE: A Novel Approach to AI Weather Evaluation through Stratified Assessments of Forecasts over Earth},
+  author={Masi, Nick and Balestriero, Randall},
+  journal={arXiv preprint arXiv:2510.26099},
+  year={2025}
+}
+```
