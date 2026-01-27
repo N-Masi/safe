@@ -22,8 +22,8 @@ models = {
         '240x121': 'gs://weatherbench2/datasets/neuralgcm_deterministic/2020-240x121_equiangular_with_poles_conservative.zarr',
     },
     'neuralgcm-ens-mean': {
-        '64x32': '2020-64x32_equiangular_conservative_mean.zarr',
-        '240x121': '2020-240x121_equiangular_with_poles_conservative_mean.zarr',
+        '64x32': 'gs://weatherbench2/datasets/neuralgcm_ens/2020-64x32_equiangular_conservative_mean.zarr',
+        '240x121': 'gs://weatherbench2/datasets/neuralgcm_ens/2020-240x121_equiangular_with_poles_conservative_mean.zarr',
     },
     'ifs-hres': {
         '64x32': 'gs://weatherbench2/datasets/hres/2016-2022-0012-64x32_equiangular_conservative.zarr',
