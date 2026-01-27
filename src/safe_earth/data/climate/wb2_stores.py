@@ -21,10 +21,25 @@ models = {
     'neuralgcm': {
         '240x121': 'gs://weatherbench2/datasets/neuralgcm_deterministic/2020-240x121_equiangular_with_poles_conservative.zarr',
     },
+    'neuralgcm-ens-mean': {
+        '64x32': '2020-64x32_equiangular_conservative_mean.zarr',
+        '240x121': '2020-240x121_equiangular_with_poles_conservative_mean.zarr',
+    },
+    'ifs-hres': {
+        '64x32': 'gs://weatherbench2/datasets/hres/2016-2022-0012-64x32_equiangular_conservative.zarr',
+        '240x121': 'gs://weatherbench2/datasets/hres/2016-2022-0012-240x121_equiangular_with_poles_conservative.zarr',
+        '512x256': 'gs://weatherbench2/datasets/hres/2016-2022-0012-512x256_equiangular_conservative.zarr',
+        '1440x721': 'gs://weatherbench2/datasets/hres/2016-2022-0012-1440x721.zarr',    
+    },
+    'ifs-ens-mean': {
+        '64x32': 'gs://weatherbench2/datasets/ifs_ens/2018-2022-64x32_equiangular_conservative_mean.zarr',
+        '240x121': 'gs://weatherbench2/datasets/ifs_ens/2018-2022-240x121_equiangular_with_poles_conservative_mean.zarr',
+        '1440x721': 'gs://weatherbench2/datasets/ifs_ens/2018-2022-1440x721_mean.zarr',
+    },
 }
 
-# TODO: get more resolution stores
 era5 = {
+    '64x32': 'gs://weatherbench2/datasets/era5/1959-2023_01_10-6h-64x32_equiangular_conservative.zarr',
     '240x121': 'gs://weatherbench2/datasets/era5/1959-2023_01_10-6h-240x121_equiangular_with_poles_conservative.zarr',
     '1440x721': 'gs://weatherbench2/datasets/era5/1959-2023_01_10-wb13-6h-1440x721_with_derived_variables.zarr',
 }
