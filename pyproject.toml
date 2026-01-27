@@ -25,7 +25,8 @@ dependencies = [
   'pytest',
   'requests_cache',
   'pygeoboundaries-geolab',
-  'kaleido'
+  'kaleido',
+  'scikit-learn'
 ]
 authors = [
   {name = "Nick Masi", email = "nicholas_masi@alumni.brown.edu"},
