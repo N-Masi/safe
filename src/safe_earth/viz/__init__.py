@@ -1,1 +1,2 @@
 import safe_earth.viz.viz_metrics
+from .graph_model_fairness import graph_model_fairness

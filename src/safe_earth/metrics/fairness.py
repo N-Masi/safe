@@ -9,7 +9,7 @@ import pdb
 def measure_fairness(
         dfs: dict[str, pd.DataFrame],
         funcs: List,
-        metric_names: List[str] = ['rmse_weighted_l2'],
+        chosen_errors: List[str] = ['rmse_weighted_l2'],
         attributes: List[str] = 'all',
         iterate_over: Optional[List[str]] = ['model', 'variable', 'lead_time']
     ) -> dict[str, pd.DataFrame]:
@@ -19,14 +19,15 @@ def measure_fairness(
     # TODO: validate list nature of args
     if not type(funcs) == list:
         funcs = [funcs]
-    if (type(metric_names) != list) and (type(metric_names) != str):
-        raise ValueError(f'incorrect type for variable "metric_names", it must be list or str, given {type(metric_names)}')
-    elif type(metric_names) == str:
-        metric_names = [metric_names]
+    if (type(chosen_errors) != list) and (type(chosen_errors) != str):
+        raise ValueError(f'Incorrect type for variable "chosen_errors",  given {type(chosen_errors)}. It must be a string or list of strings for the name" \
+                         "of each error metric to compute fairness metrics over.')
+    elif type(chosen_errors) == str:
+        chosen_errors = [chosen_errors]
     if attributes == 'all':
         attributes = [k for k in dfs.keys() if k != 'baseline']
     elif not type(attributes) == list:
-        raise ValueError(f'incorrect type for variable "attributes", it must be either "all" or a list')
+        raise ValueError(f'Incorrect type for variable "attributes", it must be either "all" or a list.')
 
     output = dict()
 
@@ -40,7 +41,7 @@ def measure_fairness(
             mask = functools.reduce(operator.and_, conditions)
             filtered_df = df[mask]
             specific_metrics_entry = {k: v for k, v in zip(iter_cols, iter_vals)}
-            for metric in metric_names:
+            for metric in chosen_errors:
                 for func in funcs:
                     specific_metrics_entry.update(func(filtered_df, metric))
             attr_output.append(specific_metrics_entry)
