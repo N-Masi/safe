@@ -187,7 +187,7 @@ def fig5(
 
 def fig8(
         errors: pd.DataFrame, 
-        no_outliers: pd.DataFrame(), 
+        no_outliers: pd.DataFrame, 
         show: bool = True, save_path: str = 'outputs/viz/iclr/rmse_as_percent',
         newnames = {'graphcast':'GraphCast', 'keisler': 'Keisler (2022)', 'pangu': 'Pangu-Weather', 'sphericalcnn': 'Spherical CNN', 'fuxi': 'FuXi', 'neuralgcm': 'NeuralGCM'},
         lead_times = [x for x in range(12, 241, 12)],
